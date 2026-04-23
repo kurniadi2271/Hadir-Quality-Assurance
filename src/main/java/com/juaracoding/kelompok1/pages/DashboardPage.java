@@ -19,7 +19,7 @@ public class DashboardPage extends BasePage {
     private WebElement pageHeader;
 
     // COLLECTION: Menangkap semua tombol add to cart
-    /* @FindBy(xpath = "//button[text()='Add to cart']")
+    @FindBy(xpath = "//button[text()='Add to cart']")
     private List<WebElement> listAddCartButtons;
 
     @FindBy(className = "shopping_cart_badge")
@@ -34,8 +34,11 @@ public class DashboardPage extends BasePage {
     @FindBy(id = "reset_sidebar_link")
     private WebElement resetAppStateLink;
 
-    @FindBy(id = "logout_sidebar_link")
-    private WebElement logoutLink;
+    @FindBy(xpath = "//button[@aria-label='menu'][contains(., 'Admin')]")
+    private WebElement profileMenu;
+
+    @FindBy(xpath = "//button[contains(., 'Logout')]")
+    private WebElement logoutButton;
 
     @FindBy(className = "product_sort_container")
     private WebElement sortDropdown;
@@ -49,7 +52,7 @@ public class DashboardPage extends BasePage {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        click(menuButton);
+        click(profileMenu);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -77,7 +80,7 @@ public class DashboardPage extends BasePage {
 
     public void clickLogout() {
         try {
-            click(logoutLink);
+            click(logoutButton);
             // Tunggu halaman berubah ke login page
             try {
                 Thread.sleep(2000);
@@ -89,7 +92,7 @@ public class DashboardPage extends BasePage {
             System.out.println("Error during logout: " + e.getMessage());
             throw e;
         }
-    } */
+    }
 
     public void addAllProductsToCart() {
         for (WebElement btn : listAddCartButtons) {
@@ -112,7 +115,7 @@ public class DashboardPage extends BasePage {
     }
 
     public String getPageHeader() {
-        // Para sa image elements, kunin ang alt attribute instead ng text
+        // Untuk elemen gambar, gunakan atribut alt sebagai pengganti teks.
         waitForElementVisible(pageHeader);
         String altText = pageHeader.getAttribute("alt");
         if (altText != null && !altText.isEmpty()) {
@@ -120,36 +123,5 @@ public class DashboardPage extends BasePage {
         }
         return getText(pageHeader);
     }
-
-    public void selectSortOption(String option) {
-        Select select = new Select(sortDropdown);
-        select.selectByValue(option);
-    }
-
-    public List<Double> getProductPrices() {
-        List<Double> prices = new ArrayList<>();
-        for (WebElement priceElement : productPrices) {
-            String priceText = priceElement.getText().replace("$", "");
-            prices.add(Double.parseDouble(priceText));
-        }
-        return prices;
-    }
-
-    public boolean isSortedAscending(List<Double> prices) {
-        for (int i = 0; i < prices.size() - 1; i++) {
-            if (prices.get(i) > prices.get(i + 1)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isSortedDescending(List<Double> prices) {
-        for (int i = 0; i < prices.size() - 1; i++) {
-            if (prices.get(i) < prices.get(i + 1)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    
 }

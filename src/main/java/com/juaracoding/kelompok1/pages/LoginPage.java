@@ -30,39 +30,34 @@ public class LoginPage extends BasePage{
     }
 
     public void clickLogin() {
+        // Tunggu tombol stabil, lalu klik. Titik.
+        waitForElementVisible(loginButton);
         click(loginButton);
-    }
-
-    public void clickLoginAndWait() {
-        click(loginButton);
-        // Tunggu hingga salah satu: URL berubah ke dashboard ATAU error message muncul
-        try {
-            waitForDashboardRedirect();
-        } catch (Exception e) {
-            // Mungkin login gagal, cek apakah ada error message
-            System.out.println("Dashboard redirect timeout, checking for error message...");
-            try {
-                Thread.sleep(1000);
-                if (isErrorVisible()) {
-                    System.out.println("Error message found: " + getErrorText());
-                }
-            } catch (Exception ex) {
-                System.out.println("Could not check for error message: " + ex.getMessage());
-            }
-            throw e; // Re-throw original exception
-        }
-    }
-
-    public boolean isErrorVisible() {
-        return isElementPresent(errorMessage);
     }
 
     public String getErrorText() {
-        return getText(errorMessage);
+        // TUNGGU dulu sampai elemennya muncul sebelum ambil teks
+        waitForElementVisible(errorMessage); 
+        return errorMessage.getText();
+    }
+
+    public boolean isErrorVisible() {
+        try {
+            // Gunakan wait dengan waktu singkat untuk cek keberadaan error
+            waitForElementVisible(errorMessage);
+            return errorMessage.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void waitForPageLoad() {
         waitForElementVisible(emailField);
+    }
+
+    // Tambahkan method pembantu di BasePage atau LoginPage
+    public boolean isDashboardPresent() {
+        return waitForUrlContains("dashboard"); 
     }
 
     public void waitForDashboardRedirect() {
