@@ -34,6 +34,7 @@ public class LoginTest {
     @And("clicks the login button")
     public void clicks_the_login_button() {
         loginPage.clickLogin();
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
     }
 
     @Then("the user should be redirected to the dashboard page")

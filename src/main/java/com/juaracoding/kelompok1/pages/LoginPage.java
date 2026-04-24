@@ -19,7 +19,7 @@ public class LoginPage extends BasePage{
     @FindBy(css = "button[type='submit']")
     private WebElement loginButton;
 
-    @FindBy(css = "[role='alert']")
+    @FindBy(xpath = "//p[text()='Akun tidak ditemukan']")
     private WebElement errorMessage;
 
     public void setCredentials(String email, String password) {
