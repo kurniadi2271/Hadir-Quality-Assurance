@@ -3,10 +3,9 @@ package com.juaracoding.kelompok1.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.StaleElementReferenceException;
-import java.util.List;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 public class LaporanSakit extends BasePage {
 
@@ -48,7 +47,7 @@ public class LaporanSakit extends BasePage {
         waitForElementVisible(sakitPageHeader);
     }
 
-
+    
     // --- METHODS: FILTER & SEARCH ---
 
     // --- METHODS: TABLE ACTIONS ---
@@ -70,5 +69,18 @@ public class LaporanSakit extends BasePage {
         return imagePreview.getAttribute("src");
     }
 
-
+    public int getBrokenImageResponseCode() {
+        String src = imagePreview.getAttribute("src");
+        int responseCode = 0;
+        try {
+            URL url = new URL(src);
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestMethod("GET");
+            http.connect();
+            responseCode = http.getResponseCode();
+        } catch (Exception e) {
+            System.out.println("Error checking image URL: " + e.getMessage());
+        }
+        return responseCode;
+    }
 }

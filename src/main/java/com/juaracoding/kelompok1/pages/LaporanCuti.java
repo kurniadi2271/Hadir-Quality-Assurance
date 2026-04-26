@@ -130,19 +130,9 @@ public class LaporanCuti extends BasePage {
         resetButton.click();
     }
 
-    public void selectStartDate(String date) {
-        // Membentuk XPath dinamis berdasarkan angka tanggal yang dikirim dari feature file
-        String dynamicXPath = String.format("//span[contains(@class,'rdrDayNumber')]//span[text()='%s']", date);
-        WebElement dateElement = driver.findElement(By.xpath(dynamicXPath));
-        waitForElementVisible(dateElement);
-        dateElement.click();
-    }
-
-    public void selectEndDate(String date) {
-        String dynamicXPath = String.format("//span[contains(@class,'rdrDayNumber')]//span[text()='%s']", date);
-        WebElement dateElement = driver.findElement(By.xpath(dynamicXPath));
-        waitForElementVisible(dateElement);
-        dateElement.click();
+    private void clickDynamicDate(String date) {
+        String xpath = String.format("//span[contains(@class,'rdrDayNumber')]//span[text()='%s']", date);
+        driver.findElement(By.xpath(xpath)).click();
     }
 
     public void selectDateRange(String start, String end) {
@@ -151,9 +141,9 @@ public class LaporanCuti extends BasePage {
         waitForElementVisible(datePicker);
         datePicker.click();
         
-        selectStartDate(start);
+        clickDynamicDate(start);
         
-        selectEndDate(end);
+        clickDynamicDate(end);
         
         waitForElementVisible(saveDate);
         saveDate.click();

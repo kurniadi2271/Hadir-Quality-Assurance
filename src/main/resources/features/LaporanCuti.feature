@@ -22,7 +22,7 @@ Feature: Laporan Cuti Functionality
 
     Scenario: Filter laporan cuti by department using filter button
         When the user clicks the filter button
-        And enters department "Unit 123" in the department search field
+        And enters department "Recruitment" in the department search field
         And clicks the terapkan button
 
     Scenario: Reset search filter

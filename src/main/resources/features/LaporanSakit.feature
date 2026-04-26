@@ -35,3 +35,7 @@ Feature: Laporan Cuti Functionality
         Then a modal with the attachment image should appear
         And the image source should not be empty
 
+    Scenario: Validate sick leave attachment is broken
+        When the user clicks the View button on the first row
+        Then a modal with the attachment image should appear
+        And the image should not be broken (HTTP 404)

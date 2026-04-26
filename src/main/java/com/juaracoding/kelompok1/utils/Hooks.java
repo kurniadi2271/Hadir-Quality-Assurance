@@ -6,6 +6,7 @@ import com.juaracoding.kelompok1.pages.LoginPage;
 import com.juaracoding.kelompok1.pages.DashboardPage;
 import com.juaracoding.kelompok1.pages.LaporanCuti;
 import com.juaracoding.kelompok1.pages.LaporanSakit;
+import com.juaracoding.kelompok1.pages.DownloadAbsen;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
@@ -15,6 +16,7 @@ public class Hooks {
     public static DashboardPage dashboardPage;
     public static LaporanCuti laporanCuti;
     public static LaporanSakit laporanSakit;
+    public static DownloadAbsen downloadAbsen;
 
     @Before(order = 1)
     public void setUp() {
@@ -24,6 +26,7 @@ public class Hooks {
         dashboardPage = new DashboardPage(driver);
         laporanCuti = new LaporanCuti(driver);
         laporanSakit = new LaporanSakit(driver);
+        downloadAbsen = new DownloadAbsen(driver);
     }
 
 

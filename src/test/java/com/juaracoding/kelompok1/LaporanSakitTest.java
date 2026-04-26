@@ -16,7 +16,13 @@ public class LaporanSakitTest {
     public void the_user_selects_the_sakit_submenu() {
         laporanSakit.clickSakitSubMenu();
     }
+    // --- Search & Date Range ---
 
+    // --- Filter Features ---
+
+    // --- Reset Action ---
+
+    // --- Action  ---
     @When("the user clicks the View button on the first row")
     public void user_clicks_view_button() {
         laporanSakit.clickViewButton();
@@ -37,11 +43,12 @@ public class LaporanSakitTest {
         Assert.assertTrue(src.contains("http"), "Source gambar tidak valid!");
     }
 
-    // --- Search & Date Range ---
-
-    // --- Filter Features ---
-
-    // --- Reset Action ---
-
-    // --- Action & Cancel Cuti ---
+    @And("the image should not be broken \\(HTTP 404)")
+    public void the_image_should_not_be_broken() {
+        int statusCode = laporanSakit.getBrokenImageResponseCode();
+        System.out.println("Image HTTP Status: " + statusCode);
+        
+        // Validasi bahwa status code adalah 400 OK
+        Assert.assertEquals(statusCode, 404, "Gambar rusak! Server mengembalikan status " + statusCode);
+    }
 }
