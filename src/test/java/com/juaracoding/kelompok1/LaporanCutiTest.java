@@ -97,9 +97,9 @@ public class LaporanCutiTest {
         laporanCuti.clickCancelCutiConfirmButton();
     }
 
-    @Then("the user should see a confirmation popup or success message")
+    /* @Then("the user should see a confirmation popup or success message")
     public void verify_cancel_success() {
         // Tips: Jika tidak ada pesan sukses, cek apakah modal tertutup atau data berkurang
         Assert.assertTrue(true); // Placeholder: tambahkan asersi spesifik jika ada elemen toast/alert
-    }
+    } */
 }

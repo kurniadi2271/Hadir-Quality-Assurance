@@ -1,6 +1,5 @@
 package com.juaracoding.kelompok1;
 
-import com.juaracoding.kelompok1.pages.LaporanCuti;
 import com.juaracoding.kelompok1.pages.LaporanSakit;
 import com.juaracoding.kelompok1.utils.Hooks;
 import io.cucumber.java.en.*;

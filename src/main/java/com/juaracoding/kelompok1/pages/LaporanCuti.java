@@ -111,6 +111,7 @@ public class LaporanCuti extends BasePage {
         searchDepartmentInput.clear();
         searchDepartmentInput.sendKeys(department);
         waitForElementVisible(firstDepartmentOption);
+        delay(1);
         firstDepartmentOption.click();
     }
 
@@ -123,6 +124,7 @@ public class LaporanCuti extends BasePage {
     public void clickSearchButton() {
         waitForElementVisible(searchButton);
         searchButton.click();
+        delay(1);
     }
 
     public void clickResetButton() {

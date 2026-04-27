@@ -24,6 +24,7 @@ Feature: Laporan Cuti Functionality
         When the user clicks the filter button
         And enters department "Recruitment" in the department search field
         And clicks the terapkan button
+        Then the user should see the list of reports
 
     Scenario: Reset search filter
         When the user enters name "Testing Data" in the search field
@@ -36,5 +37,6 @@ Feature: Laporan Cuti Functionality
         And the user scrolls the table to the right to find Action button
         And clicks the action button on the first row
         And clicks the cancel cuti action with reason "Tidak jadi cuti"
-        Then the user should see a confirmation popup or success message
+        Then the user should see an alert message "Berhasil cancel cuti"
+        # Then the user should see a confirmation popup or success message
 

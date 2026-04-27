@@ -17,7 +17,7 @@ Feature: Download Absen Functionality
         And enters divisi "!TestEditBerhasil" in the divisi input field
         And enters unit "Recruitment" in the unit input field
         And user klik tombol download
-        Then validasi file excel harus mengandung data spesifik "D7231954", "GILBERT", dan "Recruitment"
+        Then validasi file excel harus mengandung data spesifik "GILBERT", "Recruitment", dan "Gilbert"
 
     Scenario: Download laporan tapi datanya memang kosong di database
         When user pilih tanggal dari "1" sampai "2"

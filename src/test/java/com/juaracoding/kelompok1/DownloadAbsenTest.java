@@ -54,18 +54,18 @@ public class DownloadAbsenTest {
     }
 
     @Then("validasi file excel harus mengandung data spesifik {string}, {string}, dan {string}")
-    public void validasi_file_excel_spesifik(String nik, String name, String unit) {
+    public void validasi_file_excel_spesifik(String name, String unit, String upliner) {
         String latestFile = ExcelReader.getLatestDownloadFile(downloadFolder);
         Assert.assertNotNull(latestFile, "File gak ketemu di folder Download!");
 
         // Kita masukin semua kriteria ke dalam Array
-        String[] criteria = {nik, name, unit};
+        String[] criteria = {name, unit, upliner};
         
         boolean isMatch = ExcelReader.verifyRowData(latestFile, criteria);
         
         Assert.assertTrue(isMatch, 
             String.format("Data Gagal! Baris dengan NIK: %s, Nama: %s, dan Unit: %s tidak ditemukan dalam satu baris.", 
-            nik, name, unit));
+            name, unit, upliner));
         
         System.out.println("Validasi Sukses: Data ditemukan dalam satu baris yang sama.");
     }
