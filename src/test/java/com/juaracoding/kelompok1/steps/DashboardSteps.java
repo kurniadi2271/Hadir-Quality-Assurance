@@ -2,7 +2,10 @@ package com.juaracoding.kelompok1.steps;
 
 import com.juaracoding.kelompok1.pages.DashboardPage;
 import io.cucumber.java.en.*;
+
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -82,12 +85,12 @@ public class DashboardSteps {
 
     @When("User menginput Start Date {string}")
     public void input_start_date(String date) {
-        getDashboardPage().inputStartDate(date);
+    getDashboardPage().inputStartDate(date);
     }
 
     @When("User menginput End Date {string}")
     public void input_end_date(String date) {
-        getDashboardPage().inputEndDate(date);
+    getDashboardPage().inputEndDate(date);
     }
 
     @When("User klik tombol Search")

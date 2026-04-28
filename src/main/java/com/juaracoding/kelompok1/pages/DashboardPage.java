@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.Keys;
+
 
 
 public class DashboardPage extends BasePage {
@@ -58,16 +60,22 @@ public class DashboardPage extends BasePage {
     wait.until(ExpectedConditions.visibilityOfElementLocated(startDate));
     }
 
-    public void inputStartDate(String date) {
-        WebElement element = waitVisible(startDate);
-        element.clear();
-        element.sendKeys(date);
-    }
+   public void inputStartDate(String date) {
+    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(startDate));
+
+    element.click();
+    element.sendKeys(Keys.CONTROL + "a");
+    element.sendKeys(Keys.DELETE);
+    element.sendKeys(date);
+   }
 
     public void inputEndDate(String date) {
-        WebElement element = waitVisible(endDate);
-        element.clear();
-        element.sendKeys(date);
+    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(endDate));
+
+    element.click();
+    element.sendKeys(Keys.CONTROL + "a");
+    element.sendKeys(Keys.DELETE);
+    element.sendKeys(date);
     }
 
     public void clickSearch() {
