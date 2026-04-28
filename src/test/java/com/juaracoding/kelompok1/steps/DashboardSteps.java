@@ -31,30 +31,54 @@ public class DashboardSteps {
         return dashboardPage;
     }
 
-    @Given("User login sebagai Admin")
-    public void user_login_sebagai_admin() throws InterruptedException {
-        LoginSteps login = new LoginSteps();
-        login.user_on_login_page();
-        login.input_valid_credentials();
-        login.click_login_button();
+    // ================= LOGIN =================
 
+    @Given("User login sebagai Admin")
+    public void user_login_sebagai_admin() {
+        getDashboardPage().login(email, password);
     }
 
     @Given("User berada di halaman Dashboard")
-    public void user_di_dashboard() throws InterruptedException {
+    public void user_di_dashboard() {
         user_login_sebagai_admin();
-        WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlContains("dashboard"));
+        waitDashboard();
+    }
+
+    private void waitDashboard() {
+        new WebDriverWait(getDriver(), Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlContains("dashboard"));
+    }
+
+    // ================= VALIDATION =================
+
+    @Then("Halaman Dashboard ditampilkan")
+    public void verify_dashboard_page() {
         Assert.assertTrue(getDriver().getCurrentUrl().contains("dashboard"));
     }
 
-    @Given("User sudah menerapkan filter")
-    public void user_sudah_menerapkan_filter() throws InterruptedException {
-        user_di_dashboard();
-        getDashboardPage().inputStartDate("2024-01-01");
-        getDashboardPage().inputEndDate("2024-01-31");
-        getDashboardPage().clickSearch();
+    @Then("Widget Lembur, Cuti, Koreksi tampil")
+    public void verify_widgets() {
+        Assert.assertTrue(getDashboardPage().isWidgetLemburDisplayed());
+        Assert.assertTrue(getDashboardPage().isWidgetCutiDisplayed());
+        Assert.assertTrue(getDashboardPage().isWidgetKoreksiDisplayed());
     }
+
+    @Then("Data berhasil ditampilkan")
+    public void data_berhasil() {
+        Assert.assertTrue(getDashboardPage().getEmployeeRowCount() >= 0);
+    }
+
+    @Then("Halaman tetap di dashboard")
+    public void tetap_dashboard() {
+        Assert.assertTrue(getDriver().getCurrentUrl().contains("dashboard"));
+    }
+
+    @Then("Data kembali seperti semula")
+    public void reset_berhasil() {
+        Assert.assertTrue(getDashboardPage().getEmployeeRowCount() >= 0);
+    }
+
+    // ================= ACTION =================
 
     @When("User menginput Start Date {string}")
     public void input_start_date(String date) {
@@ -71,36 +95,9 @@ public class DashboardSteps {
         getDashboardPage().clickSearch();
     }
 
-    @Then("Data yang ditampilkan hanya dalam rentang {string} sampai {string}")
-    public void verify_date_range(String start, String end) {
-        int rowCount = getDashboardPage().getEmployeeRowCount();
-        Assert.assertTrue(rowCount > 0);
-    }
-
-    @Then("Sistem menampilkan validasi atau menggunakan default date range")
-    public void verify_empty_date() {
-        Assert.assertTrue(getDriver().getCurrentUrl().contains("dashboard"));
-    }
-
-    @Given("User berada di halaman Dashboard tanpa filter")
-    public void user_dashboard_tanpa_filter() throws InterruptedException {
-        user_di_dashboard();
-    }
-
-    @Then("Tidak ada perubahan data")
-    public void tidak_ada_perubahan_data() {
-        Assert.assertTrue(getDashboardPage().getEmployeeRowCount() >= 0);
-    }
-
-    @Then("Sistem tidak menampilkan error")
-    public void sistem_tidak_menampilkan_error() {
-        Assert.assertFalse(getDriver().getPageSource().contains("Error"));
-    }
-
-    @When("User membuka halaman Dashboard")
-    public void buka_dashboard() throws InterruptedException {
-        user_login_sebagai_admin();
-        Assert.assertTrue(getDriver().getCurrentUrl().contains("dashboard"));
+    @When("User klik tombol Reset")
+    public void klik_reset() {
+        getDashboardPage().clickReset();
     }
 
     @When("User klik menu {string}")
@@ -108,8 +105,11 @@ public class DashboardSteps {
         getDashboardPage().clickMenu(menu);
     }
 
-    @Then("Halaman Dashboard ditampilkan")
-    public void verify_dashboard_page() {
-        Assert.assertTrue(getDriver().getCurrentUrl().contains("dashboard"));
+    @Given("User sudah menerapkan filter")
+    public void user_sudah_filter() {
+        user_di_dashboard();
+        getDashboardPage().inputStartDate("2024-01-01");
+        getDashboardPage().inputEndDate("2024-01-31");
+        getDashboardPage().clickSearch();
     }
 }

@@ -16,11 +16,11 @@ public class DashboardPage extends BasePage {
     // ================= LOCATORS =================
 
     By inputEmail = By.name("email");
-    By inputPassword = By.name("password");
+    By inputPassword = By.id("password");
     By btnLogin = By.xpath("//button[@type='submit']");
 
-    By startDate = By.id("start_date");
-    By endDate = By.id("end_date");
+    By startDate = By.xpath("//input[@placeholder='Start Date']");
+    By endDate = By.xpath("//input[@placeholder='End Date']");
 
     By btnSearch = By.xpath("//button[contains(text(),'Search') or contains(text(),'Cari')]");
     By btnFilter = By.xpath("//button[contains(text(),'Filter') or contains(text(),'filter')]");
@@ -37,24 +37,25 @@ public class DashboardPage extends BasePage {
 
     // ================= ACTIONS =================
 
-    public void login(String email, String password) throws InterruptedException {
+    public void login(String email, String password) {
 
-        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(inputEmail));
-        emailField.click();
-        emailField.sendKeys(email);
+    driver.get("https://magang.dikahadir.com/authentication/login");
 
-        WebElement pwdField = wait.until(ExpectedConditions.elementToBeClickable(By.name("password")));
+    WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(inputEmail));
+    emailField.clear();
+    emailField.sendKeys(email);
 
-        Thread.sleep(500);
-        pwdField.click();
-        Thread.sleep(300);
-        pwdField.sendKeys(password);
+    WebElement pwdField = wait.until(ExpectedConditions.elementToBeClickable(inputPassword));
+    pwdField.clear();
+    pwdField.sendKeys(password);
 
+    wait.until(ExpectedConditions.elementToBeClickable(btnLogin)).click();
 
-        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(btnLogin));
-        loginButton.click();
+    // WAIT SAMPAI PINDAH KE DASHBOARD
+    wait.until(ExpectedConditions.urlContains("dashboard"));
 
-        wait.until(ExpectedConditions.urlContains("dashboard"));
+    // WAIT SAMPAI ELEMENT DASHBOARD READY
+    wait.until(ExpectedConditions.visibilityOfElementLocated(startDate));
     }
 
     public void inputStartDate(String date) {
