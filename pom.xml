@@ -67,6 +67,7 @@
         <version>2.21.0</version>
         <scope>compile</scope>
     </dependency>
+    
     <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
