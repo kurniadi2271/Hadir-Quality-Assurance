@@ -2,11 +2,10 @@
 Feature: Laporan Koreksi Functionality
 
     Background:
-        Given the user is on the login page
-        When the user enters valid email and password
-        And clicks the login button
-        Then the user should be redirected to the dashboard page
-        And the page header should display Logo Hadir
+        Given User is on the login page
+        When User enters valid email and password
+        And The user clicks the login button
+        Then The user is successfully redirected to the dashboard
         And the user navigates to the Laporan menu
         Then the user selects the Koreksi submenu
 
