@@ -1,5 +1,7 @@
 package com.juaracoding.kelompok1.utils;
 
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import com.juaracoding.kelompok1.drivers.DriverSingleton;
 import com.juaracoding.kelompok1.pages.LoginPage;
@@ -11,6 +13,7 @@ import com.juaracoding.kelompok1.pages.LaporanKoreksi;
 import com.juaracoding.kelompok1.pages.DownloadAbsen;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 
 public class Hooks {
     public static WebDriver driver;
@@ -37,7 +40,17 @@ public class Hooks {
 
 
     @After
-    public void tearDown() {
+    public void tearDown(Scenario scenario) {
+        WebDriver driver = DriverSingleton.getDriver();
+        
+        // Ambil screenshot untuk SEMUA kondisi (Lulus maupun Gagal)
+        final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        
+        // Berikan nama dinamis berdasarkan status skenario
+        String status = scenario.isFailed() ? "Gagal" : "Berhasil";
+        scenario.attach(screenshot, "image/png", "Evidence_" + status); 
+
+        // Tutup browser
         DriverSingleton.closeObjectInstance();
     }
 }

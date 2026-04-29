@@ -4,6 +4,7 @@ import com.juaracoding.kelompok1.pages.LaporanCuti;
 import com.juaracoding.kelompok1.utils.Hooks;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
+import java.util.List;
 
 public class LaporanCutiTest {
 
@@ -39,11 +40,27 @@ public class LaporanCutiTest {
         Assert.assertTrue(laporanCuti.getTableRowCount() > 0, "Tabel kosong atau data tidak muncul");
     }
 
-    @And("the number of rows should be greater than 0")
-    public void the_number_of_rows_should_be_greater_than_0() {
-        int rows = laporanCuti.getTableRowCount();
-        System.out.println("Jumlah laporan ditemukan: " + rows);
-        Assert.assertTrue(rows > 0, "Ekspektasi ada data, tapi tabel kosong/No Data!");
+    @Then("all table data should match the name")
+        public void all_table_data_should_match_the_name() {
+        List<String> actualDates = laporanCuti.getAllNamesFromTable();
+        for (String name : actualDates) {
+            Assert.assertTrue(name.contains("Silva"), "Data Nama tidak sesuai pencarian: " + name);
+        }
+    }
+
+    @Then("all table data should be within the date range")
+        public void all_table_data_should_be_within_the_date_range() {
+        List<String> actualDates = laporanCuti.getAllDatesFromTable();
+        for (String date : actualDates) {
+            // Logika verifikasi sederhana, misal cek apakah mengandung tahun/bulan yang benar
+            // Atau jika filter exact date, cek apakah sama
+            Assert.assertTrue(date.contains("2026"), "Data tanggal tidak sesuai pencarian: " + date);
+        }
+    }
+
+    @Then("the table should be empty")
+    public void the_table_should_be_empty() {
+        Assert.assertTrue(laporanCuti.tableEmpty(), "Ekspektasi tabel kosong, tapi ditemukan data!");
     }
 
     // --- Filter Features ---
@@ -96,10 +113,4 @@ public class LaporanCutiTest {
         laporanCuti.enterCancelCutiReason(reason);
         laporanCuti.clickCancelCutiConfirmButton();
     }
-
-    /* @Then("the user should see a confirmation popup or success message")
-    public void verify_cancel_success() {
-        // Tips: Jika tidak ada pesan sukses, cek apakah modal tertutup atau data berkurang
-        Assert.assertTrue(true); // Placeholder: tambahkan asersi spesifik jika ada elemen toast/alert
-    } */
 }

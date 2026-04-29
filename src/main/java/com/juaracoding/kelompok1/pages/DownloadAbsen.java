@@ -37,12 +37,6 @@ public class DownloadAbsen extends BasePage {
     @FindBy(xpath = "//input[@placeholder='Pilih Unit']")
     private WebElement searchUnitInput;
 
-    @FindBy(xpath = "//input[@placeholder='Pilih Tipe']")
-    private WebElement searchTipeInput;
-
-    @FindBy(xpath ="(//li[@role='option'])[1]")
-    private WebElement firstOption;
-
     @FindBy(xpath = "//button[contains(text(), 'Download')]")
     private WebElement downloadButton;
 
@@ -77,54 +71,62 @@ public class DownloadAbsen extends BasePage {
         waitForElementVisible(searchNikInput);
         searchNikInput.clear();
         searchNikInput.sendKeys(nik);
-        waitForElementVisible(firstOption);
-        firstOption.click();
+        // Membuat dynamic xpath yang mencari element dengan teks yang pas
+        String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", nik);
+        
+        WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
+        waitForElementVisible(opsiTepat);
+        opsiTepat.click();
     }
 
     public void enterSearchName(String name) {
         waitForElementVisible(searchNameInput);
         searchNameInput.clear();
         searchNameInput.sendKeys(name);
-        waitForElementVisible(firstOption);
-        firstOption.click();
+        String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", name);
+        
+        WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
+        waitForElementVisible(opsiTepat);
+        opsiTepat.click();
     }
 
     public void enterSearchUpliner(String upliner) {
         waitForElementVisible(searchUplinerInput);
         searchUplinerInput.clear();
         searchUplinerInput.sendKeys(upliner);
-        waitForElementVisible(firstOption);
-        firstOption.click();
+        String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", upliner);
+        
+        WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
+        waitForElementVisible(opsiTepat);
+        opsiTepat.click();
     }
 
     public void enterSearchDivisi(String divisi) {
         waitForElementVisible(searchDivisiInput);
         searchDivisiInput.clear();
         searchDivisiInput.sendKeys(divisi);
-        waitForElementVisible(firstOption);
-        firstOption.click();
+        String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", divisi);
+        
+        WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
+        waitForElementVisible(opsiTepat);
+        opsiTepat.click();
     }
 
     public void enterSearchUnit(String unit) {
         waitForElementVisible(searchUnitInput);
         searchUnitInput.clear();
         searchUnitInput.sendKeys(unit);
-        waitForElementVisible(firstOption);
-        firstOption.click();
-    }
-
-    public void enterSearchTipe(String tipe) {
-        waitForElementVisible(searchTipeInput);
-        searchTipeInput.clear();
-        searchTipeInput.sendKeys(tipe);
-        waitForElementVisible(firstOption);
-        firstOption.click();
+        String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", unit);
+        
+        WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
+        waitForElementVisible(opsiTepat);
+        opsiTepat.click();
     }
 
     public void clickDownloadButton() {
         waitForElementVisible(downloadButton);
         downloadButton.click();
-        delay(1);
+        delay(5);
     }
 
     public void selectStartDate(String date) {
@@ -142,7 +144,7 @@ public class DownloadAbsen extends BasePage {
 
     public void selectDateRange(String start, String end) {
         // Menggunakan delay kecil untuk stabilitas UI jika diperlukan
-        delay(1); 
+        delay(2); 
         waitForElementVisible(datePicker);
         datePicker.click();
         

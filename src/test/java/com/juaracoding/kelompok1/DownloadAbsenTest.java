@@ -9,7 +9,6 @@ import org.testng.Assert;
 public class DownloadAbsenTest {
 
     private DownloadAbsen downloadAbsen = Hooks.downloadAbsen;
-    private int fileCountBefore;
     private String downloadFolder = System.getProperty("user.home") + "/Downloads";
 
     @Then("the user selects the Download Absen submenu")
@@ -54,18 +53,18 @@ public class DownloadAbsenTest {
     }
 
     @Then("validasi file excel harus mengandung data spesifik {string}, {string}, dan {string}")
-    public void validasi_file_excel_spesifik(String name, String unit, String upliner) {
+    public void validasi_file_excel_spesifik(String NIK, String Nama, String Unit) {
         String latestFile = ExcelReader.getLatestDownloadFile(downloadFolder);
         Assert.assertNotNull(latestFile, "File gak ketemu di folder Download!");
 
         // Kita masukin semua kriteria ke dalam Array
-        String[] criteria = {name, unit, upliner};
+        String[] criteria = {NIK, Nama, Unit};
         
         boolean isMatch = ExcelReader.verifyRowData(latestFile, criteria);
         
         Assert.assertTrue(isMatch, 
             String.format("Data Gagal! Baris dengan NIK: %s, Nama: %s, dan Unit: %s tidak ditemukan dalam satu baris.", 
-            name, unit, upliner));
+            NIK, Nama, Unit));
         
         System.out.println("Validasi Sukses: Data ditemukan dalam satu baris yang sama.");
     }

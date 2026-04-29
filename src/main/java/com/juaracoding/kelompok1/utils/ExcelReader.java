@@ -21,26 +21,37 @@ public class ExcelReader {
     }
 
     // METHOD VALIDASI SPESIFIK: Cek apakah NIK, Nama, dan Unit ada di BARIS YANG SAMA
+
     public static boolean verifyRowData(String filePath, String[] keywords) {
         try (FileInputStream fis = new FileInputStream(new File(filePath))) {
             Workbook workbook = WorkbookFactory.create(fis);
             Sheet sheet = workbook.getSheetAt(0);
+            DataFormatter formatter = new DataFormatter(); // Menyamakan tampilan Excel dengan String Java
 
             for (Row row : sheet) {
                 StringBuilder rowContent = new StringBuilder();
-                for (Cell cell : row) {
-                    rowContent.append(cell.toString().toLowerCase()).append(" ");
+                
+                // Loop setiap cell, termasuk yang kosong (MissingCellPolicy)
+                for (int cn = 0; cn < row.getLastCellNum(); cn++) {
+                    Cell cell = row.getCell(cn, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    String cellValue = formatter.formatCellValue(cell).trim();
+                    rowContent.append(cellValue.toLowerCase()).append(" ");
                 }
+
+                String fullRowText = rowContent.toString();
+                
+                // Log untuk debug (Hapus jika sudah jalan)
+                // System.out.println("Memeriksa Baris " + row.getRowNum() + ": " + fullRowText);
 
                 boolean allMatch = true;
                 for (String keyword : keywords) {
-                    if (!rowContent.toString().contains(keyword.toLowerCase())) {
+                    if (keyword == null || !fullRowText.contains(keyword.toLowerCase().trim())) {
                         allMatch = false;
                         break;
                     }
                 }
 
-                if (allMatch) return true; // Ketemu baris yang isinya cocok semua keyword
+                if (allMatch) return true; 
             }
         } catch (Exception e) {
             e.printStackTrace();

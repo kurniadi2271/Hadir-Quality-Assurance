@@ -6,6 +6,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class LaporanCuti extends BasePage {
@@ -69,8 +71,11 @@ public class LaporanCuti extends BasePage {
     @FindBy(xpath = "//table/tbody/tr")
     private List<WebElement> tableRows;
 
-    @FindBy(xpath = "//table/tbody/tr/td[contains(text(), 'No Data')]")
-    private WebElement noDataMessage;
+    @FindBy(xpath = "//table/tbody/tr/td[3]")
+    private List<WebElement> dateCells;
+
+    @FindBy(xpath = "//table/tbody/tr/td[2]")
+    private List<WebElement> nameCells;
 
 
     // --- METHODS: NAVIGATION ---
@@ -83,6 +88,7 @@ public class LaporanCuti extends BasePage {
         waitForElementVisible(cutiSubMenu);
         cutiSubMenu.click();
         waitForElementVisible(cutiPageHeader);
+        delay(2);
     }
 
 
@@ -111,14 +117,14 @@ public class LaporanCuti extends BasePage {
         searchDepartmentInput.clear();
         searchDepartmentInput.sendKeys(department);
         waitForElementVisible(firstDepartmentOption);
-        delay(1);
+        delay(2);
         firstDepartmentOption.click();
     }
 
     public void clickTerapkanButton() {
         waitForElementVisible(terapkanButton);
+        delay(2);
         terapkanButton.click();
-        delay(1);
     }
 
     public void clickSearchButton() {
@@ -180,27 +186,39 @@ public class LaporanCuti extends BasePage {
         cancelCutiConfirmButton.click();
     }
 
+    // Method untuk mengambil semua teks tanggal dari kolom tertentu (misal kolom ke-4)
+    public List<String> getAllDatesFromTable() {
+        // Sesuaikan index [4] dengan posisi kolom tanggal di aplikasi Anda
+        List<WebElement> dateElements = dateCells; 
+        List<String> dates = new ArrayList<>();
+        for (WebElement el : dateElements) {
+            dates.add(el.getText());
+        }
+        return dates;
+    }
+
+    public List<String> getAllNamesFromTable() {
+        List<WebElement> nameElements = nameCells; 
+        List<String> names = new ArrayList<>();
+        for (WebElement el : nameElements) {
+            names.add(el.getText());
+        }
+        return names;
+    }
+
 
     // --- METHODS: DATA VALIDATION ---
     public int getTableRowCount() {
         return tableRows.size();
     }
 
-    public boolean isTableEmpty() {
-        return tableRows.isEmpty() || getNoDataMessage().contains("No Data");
+    public boolean tableEmpty() {
+        return tableRows.isEmpty();
     }
 
     public String getSearchNameValue() {
         waitForElementVisible(searchNameInput);
         return searchNameInput.getAttribute("value");
-    }
-
-    public String getNoDataMessage() {
-        try {
-            return noDataMessage.getText();
-        } catch (Exception e) {
-            return "";
-        }
     }
 
     // Helper untuk menggantikan Thread.sleep agar lebih rapi
