@@ -1,21 +1,22 @@
 package com.juaracoding.kelompok1.pages;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.Objects;
 
 public class BasePage {
-    protected AppiumDriver driver;
+    protected WebDriver driver;
     protected WebDriverWait wait;
+    private static final long TIMEOUT_SECONDS = 30; // Increased timeout
 
-    public BasePage(AppiumDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15)); // Default wait 15 detik
-        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+    public BasePage(WebDriver driver) {
+        this.driver = Objects.requireNonNull(driver);
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_SECONDS));
+        PageFactory.initElements(driver, this);
     }
 
     // Metode klik yang menunggu elemen clickable
@@ -30,4 +31,37 @@ public class BasePage {
         element.sendKeys(text);
     }
 
+    // Metode untuk menunggu elemen visible
+    protected void waitForElementVisible(WebElement element) {
+        wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
+    // Metode untuk menunggu elemen presence
+    protected boolean isElementPresent(WebElement element) {
+        try {
+            return element.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Metode untuk menunggu URL mengandung teks tertentu
+    public boolean waitForUrlContains(String partUrl) {
+        return wait.until(ExpectedConditions.urlContains(partUrl));
+    }
+
+    // Metode untuk mendapatkan teks elemen
+    protected String getText(WebElement element) {
+        wait.until(ExpectedConditions.visibilityOf(element));
+        return element.getText();
+    }
+
+    // Metode untuk menunggu elemen tidak visible
+    protected boolean waitForElementInvisible(WebElement element) {
+        try {
+            return wait.until(ExpectedConditions.invisibilityOf(element));
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
