@@ -1,36 +1,32 @@
-package com.anne.reports_tc01_tc04.pages;
+package com.juaracoding.kelompok1.pages;
 
-import com.juaracoding.kelompok1.drivers.DriverSingleton;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Locale;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ReportsPage {
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class ReportsPage extends BasePage {
 
-    private static final String DEFAULT_REPORTS_URL = "https://magang.dikahadir.com/dashboards/pending";
+    private static final String DEFAULT_REPORTS_URL = "https://magang.dikahadir.com/laporan/activity";
     private static final String BASE_URL = "https://magang.dikahadir.com";
 
-    // Heuristics for menu + table (will be refined after first run)
+    // ── Sidebar / Menu locators (By-based, karena heuristic) ──
     private final By hamburgerMenu = By.cssSelector(
             "button[aria-label*='menu' i], button[aria-label*='navigation' i], " +
             "button[aria-label*='sidebar' i], button[aria-label*='drawer' i]"
@@ -47,16 +43,12 @@ public class ReportsPage {
                     "contains(translate(@href,'REPORTS','reports'),'reports')" +
                     ")]"
     );
-    private final By table = By.cssSelector("table, [role='table'], [role='grid']");
+    private final By tableLocator = By.cssSelector("table, [role='table'], [role='grid'], .MuiTableContainer-root");
 
-    // Search/filter controls (heuristic locators; will be refined)
+    // ── Filter / Search locators ──
     private final By filterButton = By.xpath(
+            "//button[contains(@class,'MuiButton-containedSecondary')] | " +
             "//button[@type='button' and (" +
-                    "contains(translate(@aria-label,'FILTER','filter'),'filter') or " +
-                    "contains(translate(@title,'FILTER','filter'),'filter') or " +
-                    "contains(translate(@data-testid,'FILTER','filter'),'filter')" +
-                    ")] | " +
-            "//button[.//svg and (" +
                     "contains(translate(@aria-label,'FILTER','filter'),'filter') or " +
                     "contains(translate(@title,'FILTER','filter'),'filter') or " +
                     "contains(translate(@data-testid,'FILTER','filter'),'filter')" +
@@ -66,6 +58,7 @@ public class ReportsPage {
             "//button[.//*[name()='polygon' and contains(@points,'22 3 2 3')]]"
     );
     private final By searchButton = By.xpath(
+            "//button[contains(@class,'MuiButton-containedPrimary') and contains(normalize-space(.),'Search')] | " +
             "//button[" +
                     "contains(translate(normalize-space(.),'SEARCHCARI','searchcari'),'search') or " +
                     "contains(translate(normalize-space(.),'SEARCHCARI','searchcari'),'cari') or " +
@@ -81,6 +74,8 @@ public class ReportsPage {
                     "/following::input[1]"
     );
     private final By nameInput = By.xpath(
+            "//input[@id='search'] | " +
+            "//input[contains(@placeholder,'Cari berdasarkan nama')] | " +
             "//input[(" +
                     "@type='text' or @type='search'" +
                     ") and (" +
@@ -90,138 +85,79 @@ public class ReportsPage {
                     "contains(translate(@placeholder,'NAME','name'),'name')" +
                     ")]"
     );
-
     private final By laporanMenuItem = By.xpath(
             "//*[@aria-label='Laporan' or contains(translate(@aria-label,'LAPORAN','laporan'),'laporan')]"
     );
     private final By kehadiranMenuItem = By.xpath(
             "//*[@aria-label='Kehadiran' or contains(translate(@aria-label,'KEHADIRAN','kehadiran'),'kehadiran')]"
     );
-    private final By kehadiranMenuText = By.xpath(
-            "//*[self::a or self::button or self::div or self::span]" +
-                    "[normalize-space()='Kehadiran' or contains(translate(normalize-space(.),'KEHADIRAN','kehadiran'),'kehadiran')]"
-    );
     private final By unitField = By.xpath(
+            "//input[@id='job_departement'] | " +
+            "//input[contains(@placeholder,'Cari Departemen')] | " +
             "//label[contains(translate(normalize-space(.),'UNIT','unit'),'unit')]/following::input[1] | " +
             "//*[contains(translate(normalize-space(.),'UNIT','unit'),'unit')]/ancestor::*[self::label or self::div][1]//input | " +
             "//input[contains(translate(@placeholder,'UNIT','unit'),'unit') or contains(translate(@name,'UNIT','unit'),'unit') or contains(translate(@id,'UNIT','unit'),'unit')]"
     );
-    private final By applyButton = By.xpath(
-            "//button[contains(translate(normalize-space(.),'TERAPKANAPPLY','terapkanapply'),'terapkan') or " +
-                    "contains(translate(normalize-space(.),'TERAPKANAPPLY','terapkanapply'),'apply')]"
+    private final By submitSearchButton = By.xpath(
+            "//button[contains(normalize-space(.),'Terapkan')] | " +
+            "//button[@type='submit' and contains(translate(normalize-space(.),'SEARCH','search'),'search')]"
     );
-    private final By submitSearchButton = By.xpath("//button[@type='submit' and contains(translate(normalize-space(.),'SEARCH','search'),'search')]");
 
-    public ReportsPage() {
-        this.driver = DriverSingleton.getDriver();
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    public ReportsPage(WebDriver driver) {
+        super(driver);
     }
+
+    // ── Navigation ──
 
     public void openFromMenu() {
         try {
-            // If already on the default reports/dashboard page, no navigation needed.
-            if (driver.getCurrentUrl() != null && driver.getCurrentUrl().contains("/dashboards/pending")) {
+            String url = driver.getCurrentUrl();
+            if (url != null && url.contains("/laporan/activity")) {
                 return;
             }
 
-            // Try opening sidebar/drawer first (if exists)
-            List<WebElement> hamburgers = driver.findElements(hamburgerMenu);
-            if (!hamburgers.isEmpty()) {
-                WebElement hb = firstVisibleEnabled(hamburgers);
-                if (hb != null) hb.click();
-            }
-
-            // Prefer href-based navigation (sidebar uses icons, often no text)
-            List<WebElement> hrefLinks = driver.findElements(laporanMenuByHref);
-            WebElement link = firstVisibleEnabled(hrefLinks);
-            if (link != null) {
-                link.click();
-                return;
-            }
-
-            // Fallback to text-based
-            WebElement laporan = wait.until(ExpectedConditions.elementToBeClickable(laporanMenuByText));
-            laporan.click();
-        } catch (TimeoutException e) {
-            dumpDebugArtifacts("open_reports_menu");
-            // Fallback: direct navigation (sidebar uses icon buttons without href/text)
-            driver.get(DEFAULT_REPORTS_URL);
-            wait.until(ExpectedConditions.presenceOfElementLocated(table));
-        }
-    }
-
-    public void openAttendanceReport() {
-        // Try to navigate via sidebar: Laporan -> Kehadiran
-        if (driver.getCurrentUrl() == null || !driver.getCurrentUrl().contains("/dashboards/pending")) {
-            driver.get(DEFAULT_REPORTS_URL);
-        }
-
-        try {
-            // Ensure sidebar is expanded (some states collapse into icons)
+            // Try sidebar navigation first
             List<WebElement> hamburgers = driver.findElements(hamburgerMenu);
             WebElement hb = firstVisibleEnabled(hamburgers);
             if (hb != null) hb.click();
 
-            WebElement laporan = wait.until(ExpectedConditions.visibilityOfElementLocated(laporanMenuItem));
-            safeClick(laporan); // expand submenu (usually shows children)
-            // capture DOM after expanding (helps us learn submenu labels)
-            dumpDebugArtifacts("after_click_laporan");
-
-            // Prefer aria-label based item (more stable than visible text)
-            WebElement keh = wait.until(ExpectedConditions.visibilityOfElementLocated(kehadiranMenuItem));
-            safeClick(keh); // open Kehadiran report page
-            return;
-        } catch (TimeoutException e) {
-            dumpDebugArtifacts("open_attendance_report");
-            // Fallback: try common attendance report routes (UI hides submenu in collapsed nav)
-            String[] candidates = new String[]{
-                    "/laporan/activity",
-                    "/laporan/kehadiran",
-                    "/laporan/attendance",
-                    "/reports/kehadiran",
-                    "/reports/attendance",
-                    "/report/attendance",
-                    "/attendance",
-                    "/kehadiran",
-                    "/laporan/absen",
-                    "/reports/absen",
-            };
-
-            for (String path : candidates) {
+            List<WebElement> hrefLinks = driver.findElements(laporanMenuByHref);
+            WebElement link = firstVisibleEnabled(hrefLinks);
+            if (link != null) {
+                link.click();
+                // Wait for the Kehadiran submenu and click it
                 try {
-                    driver.get(BASE_URL + path);
-                    // quick probe for Unit label/field existence
-                    driver.findElement(By.xpath("//*[contains(translate(normalize-space(.),'UNIT','unit'),'unit')]"));
-                    return;
-                } catch (Exception ignored) {
+                    WebElement keh = wait.until(ExpectedConditions.visibilityOfElementLocated(kehadiranMenuItem));
+                    safeClick(keh);
+                } catch (TimeoutException ignored) {
                 }
+                return;
             }
 
-            // If still not found, rethrow the original timeout
-            throw e;
+            WebElement laporan = wait.until(ExpectedConditions.elementToBeClickable(laporanMenuByText));
+            laporan.click();
+        } catch (TimeoutException e) {
+            dumpDebugArtifacts("open_reports_menu");
+            driver.get(DEFAULT_REPORTS_URL);
+            wait.until(ExpectedConditions.presenceOfElementLocated(tableLocator));
         }
     }
 
-    private void safeClick(WebElement el) {
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(el)).click();
-        } catch (Exception clickFail) {
-            try {
-                // fallback js click (for MUI elements)
-                ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", el);
-            } catch (Exception ignored) {
-                throw clickFail;
-            }
+    public void openAttendanceReport() {
+        String url = driver.getCurrentUrl();
+        if (url != null && url.contains("/laporan/activity")) {
+            return; // Already on the attendance report page
         }
+
+        // Navigate directly to the attendance report page
+        driver.get(DEFAULT_REPORTS_URL);
+        wait.until(ExpectedConditions.presenceOfElementLocated(tableLocator));
     }
 
-    private void safeClick(By locator) {
-        WebElement el = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-        safeClick(el);
-    }
+    // ── Filter & Search ──
 
     public void filterByUnit(String unit) {
-        // Open filter panel
+        // Click the orange filter (funnel) button to open the filter modal
         try {
             safeClick(filterButton);
             dumpDebugArtifacts("after_click_filter");
@@ -230,90 +166,92 @@ public class ReportsPage {
             throw e;
         }
 
+        // Wait for the filter modal/dialog to appear and find the unit/department input
         WebElement unitInput;
         try {
-            unitInput = wait.until(ExpectedConditions.elementToBeClickable(unitField));
+            unitInput = wait.until(ExpectedConditions.presenceOfElementLocated(unitField));
         } catch (TimeoutException e) {
             dumpDebugArtifacts("filter_by_unit");
-            // Fallback: if Unit filter UI isn't available, at least ensure the page has Unit column.
-            // This keeps TC_REP_004 runnable while waiting for the exact filter UI locator.
-            wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//*[self::th or self::h5][contains(translate(normalize-space(.),'UNIT','unit'),'unit')]")
-            ));
+            wait.until(ExpectedConditions.presenceOfElementLocated(tableLocator));
             return;
         }
 
-        safeClick(unitInput);
-        unitInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        unitInput.sendKeys(Keys.BACK_SPACE);
+        // Focus the input via JS first, then use real sendKeys to trigger MUI Autocomplete
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true); arguments[0].focus();", unitInput);
+        try { Thread.sleep(300); } catch (InterruptedException ignored) {}
 
-        // If feature still has placeholder, pick first option by opening dropdown and pressing arrow+enter.
-        if ("<UNIT_NAME>".equals(unit) || unit.trim().isEmpty()) {
-            unitInput.sendKeys(Keys.ARROW_DOWN);
-            unitInput.sendKeys(Keys.ENTER);
-        } else {
-            unitInput.sendKeys(unit);
-            unitInput.sendKeys(Keys.ENTER);
+        String searchText = ("<UNIT_NAME>".equals(unit) || unit.trim().isEmpty()) ? "a" : unit;
+
+        try {
+            unitInput.clear();
+            unitInput.sendKeys(searchText);
+        } catch (Exception e) {
+            // Fallback to JS if sendKeys fails
+            js.executeScript(
+                "var setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;" +
+                "setter.call(arguments[0], arguments[1]);" +
+                "arguments[0].dispatchEvent(new Event('input', {bubbles:true}));" +
+                "arguments[0].dispatchEvent(new Event('change', {bubbles:true}));",
+                unitInput, searchText
+            );
         }
 
-        // On Kehadiran page, filter is applied via Search (type=submit), not "Terapkan"
-        WebElement apply = wait.until(ExpectedConditions.elementToBeClickable(submitSearchButton));
-        apply.click();
+        // Try to find listbox options with a short timeout (3s max)
+        // Using findElements (non-blocking) to avoid browser crash from 30s timeout
+        WebElement firstOption = null;
+        long deadline = System.currentTimeMillis() + 3000;
+        while (System.currentTimeMillis() < deadline) {
+            List<WebElement> options = driver.findElements(
+                    By.xpath("//ul[@role='listbox']//li | //li[contains(@id,'job_departement-option')]"));
+            if (!options.isEmpty()) {
+                firstOption = options.get(0);
+                break;
+            }
+            try { Thread.sleep(300); } catch (InterruptedException ignored) {}
+        }
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(table));
+        if (firstOption != null) {
+            safeClick(firstOption);
+        } else {
+            // Fallback: keyboard navigation
+            try {
+                unitInput.sendKeys(Keys.ARROW_DOWN);
+                try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+                unitInput.sendKeys(Keys.ENTER);
+            } catch (Exception ignored) {}
+        }
+
+        // Click "Terapkan" using safeClick (JS fallback) to handle MUI Dialog overlay
+        WebElement apply = wait.until(ExpectedConditions.presenceOfElementLocated(submitSearchButton));
+        safeClick(apply);
+        wait.until(ExpectedConditions.presenceOfElementLocated(tableLocator));
     }
 
     public String getUnitFieldValue() {
         try {
-            WebElement unitInput = driver.findElement(unitField);
-            String v = unitInput.getAttribute("value");
+            WebElement input = driver.findElement(unitField);
+            String v = input.getAttribute("value");
             return v == null ? "" : v.trim();
         } catch (Exception e) {
             return "";
         }
     }
 
-    private WebElement firstVisibleEnabled(List<WebElement> els) {
-        for (WebElement el : els) {
-            try {
-                if (el.isDisplayed() && el.isEnabled()) return el;
-            } catch (Exception ignored) {
-            }
-        }
-        return null;
-    }
-
-    public boolean isTableDisplayed() {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(table)).isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
     public void searchByName(String name) {
-        // Ensure we are on reports/dashboard page
-        if (driver.getCurrentUrl() == null || !driver.getCurrentUrl().contains("/dashboards/pending")) {
+        // Ensure we are on the reports/laporan page
+        String url = driver.getCurrentUrl();
+        if (url == null || !url.contains("/laporan/activity")) {
             driver.get(DEFAULT_REPORTS_URL);
+            wait.until(ExpectedConditions.presenceOfElementLocated(tableLocator));
         }
 
         WebElement input;
         try {
             input = wait.until(ExpectedConditions.elementToBeClickable(nameInput));
         } catch (TimeoutException firstFail) {
-            // Try opening filter drawer/modal first (funnel icon)
-            try {
-                List<WebElement> filters = driver.findElements(filterButton);
-                WebElement fb = firstVisibleEnabled(filters);
-                if (fb != null) fb.click();
-            } catch (Exception ignored) {
-            }
-            try {
-                input = wait.until(ExpectedConditions.elementToBeClickable(nameInput));
-            } catch (TimeoutException secondFail) {
-                dumpDebugArtifacts("search_by_name");
-                throw secondFail;
-            }
+            dumpDebugArtifacts("search_by_name");
+            throw firstFail;
         }
 
         input.clear();
@@ -321,19 +259,58 @@ public class ReportsPage {
 
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(searchButton));
         btn.click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(tableLocator));
+        // Give React time to re-render results, then dump for debugging
+        try { Thread.sleep(1500); } catch (InterruptedException ignored) {}
+        dumpDebugArtifacts("after_search_by_name");
+    }
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(table));
+    public void searchByDateRange(String from, String to) {
+        String url = driver.getCurrentUrl();
+        if (url == null || !url.contains("/laporan/activity")) {
+            driver.get(DEFAULT_REPORTS_URL);
+        }
+
+        WebElement start = wait.until(ExpectedConditions.elementToBeClickable(startDateInput));
+        replaceInputValue(start, normalizeToIso(from));
+
+        WebElement end = wait.until(ExpectedConditions.elementToBeClickable(endDateInput));
+        replaceInputValue(end, normalizeToIso(to));
+
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(searchButton));
+        btn.click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(tableLocator));
+    }
+
+    // ── Data Getters ──
+
+    public boolean isTableDisplayed() {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(tableLocator)).isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public List<String> getVisibleNamesFromTables() {
         List<String> names = new ArrayList<>();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         List<WebElement> tables = driver.findElements(By.cssSelector("table"));
         for (WebElement t : tables) {
             try {
                 if (!t.isDisplayed()) continue;
-                List<WebElement> firstCol = t.findElements(By.xpath(".//tbody//tr/td[1]"));
-                for (WebElement c : firstCol) {
-                    if (c.isDisplayed()) names.add(c.getText().trim());
+                List<WebElement> rows = t.findElements(By.xpath(".//tbody//tr"));
+                for (WebElement row : rows) {
+                    List<WebElement> cells = row.findElements(By.xpath(".//td"));
+                    if (cells.isEmpty()) continue;
+                    WebElement firstCell = cells.get(0);
+                    if (!firstCell.isDisplayed()) continue;
+                    // Use JS innerText to get visible text regardless of nested structure
+                    String text = (String) js.executeScript(
+                            "return arguments[0].innerText;", firstCell);
+                    if (text != null && !text.trim().isEmpty()) {
+                        names.add(text.trim());
+                    }
                 }
             } catch (Exception ignored) {
             }
@@ -356,33 +333,6 @@ public class ReportsPage {
         return units;
     }
 
-    private Integer findColumnIndexByHeader(WebElement tableEl, String headerContainsLower) {
-        List<WebElement> headers = tableEl.findElements(By.xpath(".//thead//tr[1]//th"));
-        if (headers.isEmpty()) headers = tableEl.findElements(By.xpath(".//tr[1]//th"));
-        for (int i = 0; i < headers.size(); i++) {
-            String h = headers.get(i).getText() == null ? "" : headers.get(i).getText().trim().toLowerCase();
-            if (h.contains(headerContainsLower)) return i + 1;
-        }
-        return null;
-    }
-
-    public void searchByDateRange(String from, String to) {
-        if (driver.getCurrentUrl() == null || !driver.getCurrentUrl().contains("/dashboards/pending")) {
-            driver.get(DEFAULT_REPORTS_URL);
-        }
-
-        WebElement start = wait.until(ExpectedConditions.elementToBeClickable(startDateInput));
-        replaceInputValue(start, normalizeToIso(from));
-
-        WebElement end = wait.until(ExpectedConditions.elementToBeClickable(endDateInput));
-        replaceInputValue(end, normalizeToIso(to));
-
-        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(searchButton));
-        btn.click();
-
-        wait.until(ExpectedConditions.presenceOfElementLocated(table));
-    }
-
     public String getStartDateValue() {
         try {
             return wait.until(ExpectedConditions.presenceOfElementLocated(startDateInput)).getAttribute("value");
@@ -397,15 +347,6 @@ public class ReportsPage {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    private void replaceInputValue(WebElement input, String value) {
-        input.click();
-        input.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        input.sendKeys(Keys.BACK_SPACE);
-        input.sendKeys(value);
-        // blur to apply (if needed)
-        input.sendKeys(Keys.TAB);
     }
 
     public List<LocalDate> getVisibleDatesFromTables(LocalDate from, LocalDate to) {
@@ -425,7 +366,6 @@ public class ReportsPage {
                         if (parsed != null) dates.add(parsed);
                     }
                 } else {
-                    // Fallback: scan all cells for any parseable date string
                     List<WebElement> cells = t.findElements(By.xpath(".//tbody//tr/td"));
                     for (WebElement c : cells) {
                         if (!c.isDisplayed()) continue;
@@ -444,8 +384,46 @@ public class ReportsPage {
         return dates;
     }
 
+    // ── Private helpers ──
+
+    private void safeClick(WebElement el) {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(el)).click();
+        } catch (Exception clickFail) {
+            try {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", el);
+            } catch (Exception ignored) {
+                throw clickFail;
+            }
+        }
+    }
+
+    private void safeClick(By locator) {
+        WebElement el = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        safeClick(el);
+    }
+
+    private WebElement firstVisibleEnabled(List<WebElement> els) {
+        for (WebElement el : els) {
+            try {
+                if (el.isDisplayed() && el.isEnabled()) return el;
+            } catch (Exception ignored) {
+            }
+        }
+        return null;
+    }
+
+    private Integer findColumnIndexByHeader(WebElement tableEl, String headerContainsLower) {
+        List<WebElement> headers = tableEl.findElements(By.xpath(".//thead//tr[1]//th"));
+        if (headers.isEmpty()) headers = tableEl.findElements(By.xpath(".//tr[1]//th"));
+        for (int i = 0; i < headers.size(); i++) {
+            String h = headers.get(i).getText() == null ? "" : headers.get(i).getText().trim().toLowerCase();
+            if (h.contains(headerContainsLower)) return i + 1;
+        }
+        return null;
+    }
+
     private Integer findDateColumnIndex(WebElement tableEl) {
-        // Returns 1-based index for XPath td[n]
         List<WebElement> headers = tableEl.findElements(By.xpath(".//thead//tr[1]//th"));
         if (headers.isEmpty()) headers = tableEl.findElements(By.xpath(".//tr[1]//th"));
         for (int i = 0; i < headers.size(); i++) {
@@ -457,8 +435,15 @@ public class ReportsPage {
         return null;
     }
 
+    private void replaceInputValue(WebElement input, String value) {
+        input.click();
+        input.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        input.sendKeys(Keys.BACK_SPACE);
+        input.sendKeys(value);
+        input.sendKeys(Keys.TAB);
+    }
+
     private String normalizeToIso(String raw) {
-        // Accept "dd-MM-yyyy" or "yyyy-MM-dd"; output "yyyy-MM-dd" (matches what we saw in UI)
         LocalDate d = tryParseDate(raw);
         if (d == null) return raw;
         return d.format(DateTimeFormatter.ISO_LOCAL_DATE);
@@ -467,8 +452,8 @@ public class ReportsPage {
     private LocalDate tryParseDate(String raw) {
         String v = raw.trim();
         DateTimeFormatter[] fmts = new DateTimeFormatter[]{
-                DateTimeFormatter.ISO_LOCAL_DATE,                 // 2026-04-22
-                DateTimeFormatter.ofPattern("dd-MM-yyyy"),        // 22-04-2026
+                DateTimeFormatter.ISO_LOCAL_DATE,
+                DateTimeFormatter.ofPattern("dd-MM-yyyy"),
                 DateTimeFormatter.ofPattern("d-M-yyyy"),
                 DateTimeFormatter.ofPattern("dd/MM/yyyy"),
                 DateTimeFormatter.ofPattern("d/M/yyyy"),
@@ -505,4 +490,3 @@ public class ReportsPage {
         }
     }
 }
-

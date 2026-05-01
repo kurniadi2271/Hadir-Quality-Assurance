@@ -11,6 +11,8 @@ import com.juaracoding.kelompok1.pages.LaporanSakit;
 import com.juaracoding.kelompok1.pages.LaporanLembur;
 import com.juaracoding.kelompok1.pages.LaporanKoreksi;
 import com.juaracoding.kelompok1.pages.DownloadAbsen;
+import com.juaracoding.kelompok1.pages.ReportsLoginPage;
+import com.juaracoding.kelompok1.pages.ReportsPage;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -24,6 +26,8 @@ public class Hooks {
     public static LaporanLembur laporanLembur;
     public static LaporanKoreksi laporanKoreksi;
     public static DownloadAbsen downloadAbsen;
+    public static ReportsLoginPage reportsLoginPage;
+    public static ReportsPage reportsPage;
 
     @Before(order = 1)
     public void setUp() {
@@ -36,6 +40,8 @@ public class Hooks {
         laporanLembur = new LaporanLembur(driver);
         laporanKoreksi = new LaporanKoreksi(driver);
         downloadAbsen = new DownloadAbsen(driver);
+        reportsLoginPage = new ReportsLoginPage(driver);
+        reportsPage = new ReportsPage(driver);
     }
 
 
