@@ -1,45 +1,35 @@
 package com.juaracoding.kelompok1.drivers;
 
+import org.openqa.selenium.WebDriver;
 import com.juaracoding.kelompok1.drivers.strategies.DriverStrategy;
 import com.juaracoding.kelompok1.drivers.strategies.DriverStrategyImplementer;
-import com.juaracoding.kelompok1.utils.Constants;
-
-import org.openqa.selenium.WebDriver;
-
-import java.time.Duration;
 
 public class DriverSingleton {
 
-    private static DriverSingleton instance = null;
     private static WebDriver driver;
-
-    private DriverSingleton(String strategy) {
-        String browser = System.getProperty("browser");
-        if (browser == null || browser.isEmpty()) {
-            browser = strategy;
-        }
-        DriverStrategy driverStrategy = DriverStrategyImplementer.chooseStrategy(browser);
-        driver = driverStrategy.setStrategy(browser);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Constants.TIMEOUT));
-        
-        if (!browser.contains("headless")) {
-            driver.manage().window().maximize();
-        }
-    }
-
-    public static DriverSingleton getInstance(String strategy) {
-        if (instance == null) {
-            instance = new DriverSingleton(strategy);
-        }
-        return instance;
-    }
 
     public static WebDriver getDriver() {
         return driver;
     }
 
+    public static void getInstance(String browser) {
+        if (driver == null) {
+            DriverStrategy strategy = DriverStrategyImplementer.chooseStrategy(browser);
+            if (strategy != null) {
+                driver = strategy.setStrategy(browser);
+                driver.manage().window().maximize();
+            }
+        }
+    }
+
     public static void closeObjectInstance() {
-        instance = null;
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
+    }
+
+    public static void quitDriver() {
+        closeObjectInstance();
     }
 }

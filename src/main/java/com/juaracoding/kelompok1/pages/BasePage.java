@@ -1,10 +1,12 @@
 package com.juaracoding.kelompok1.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import java.time.Duration;
 import java.util.Objects;
 
@@ -19,9 +21,8 @@ public class BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    // Metode klik yang menunggu elemen clickable
-    protected void click(WebElement element) {
-        wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+    public WebElement waitVisible(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     // Metode kirim teks yang menunggu elemen visible
@@ -63,5 +64,11 @@ public class BasePage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    // Metode untuk click elemen
+    protected void click(WebElement element) {
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+        element.click();
     }
 }
