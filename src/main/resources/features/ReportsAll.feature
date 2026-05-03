@@ -1,3 +1,4 @@
+@SIT @SemuaLaporan
 Feature: Reports - TC_REP_001 to TC_REP_004
 
   Scenario: TC_REP_001 - Menampilkan semua laporan

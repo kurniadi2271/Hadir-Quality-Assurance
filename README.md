@@ -1,53 +1,156 @@
-# SauceDemo BDD Testing Project
+# Hadir Quality Assurance Project
 
-This project implements Behavior-Driven Development (BDD) testing for the SauceDemo e-commerce website using Cucumber, Selenium WebDriver, and TestNG.
+Proyek ini adalah implementasi pengujian Behavior-Driven Development (BDD) untuk aplikasi Hadir (sistem manajemen kehadiran) menggunakan Cucumber, Selenium WebDriver, dan TestNG.
 
-## Features Tested
+## Fitur yang Diuji
 
-### 1. Authentication
-- User login with valid credentials
-- Login failure with invalid credentials
+### 1. Login
+- Login dengan kredensial valid
+- Login gagal dengan kredensial tidak valid
 
-### 2. Product Sorting
-- Sort products by price (low to high)
-- Sort products by price (high to low)
-- Negative test for invalid sort options
+### 2. Dashboard
+- Akses dan navigasi dashboard
 
-### 3. Shopping Cart Management
-- Add single product to cart
-- Add multiple products to cart
-- Negative test for adding non-existent product
-- Reset app state before logout (clears cart state)
+### 3. Laporan Kehadiran
+- Melihat laporan kehadiran karyawan
 
-## Project Structure
+### 4. Laporan Cuti
+- Mengelola dan melihat laporan cuti
+
+### 5. Laporan Izin Terlambat
+- Mengelola izin terlambat
+
+### 6. Laporan Izin Pulang Cepat
+- Mengelola izin pulang cepat
+
+### 7. Laporan Sakit
+- Mengelola laporan sakit
+
+### 8. Laporan Lembur
+- Mengelola laporan lembur
+
+### 9. Laporan Koreksi
+- Mengelola koreksi kehadiran
+
+### 10. Download Absen
+- Mengunduh data absensi
+
+### 11. Reports All
+- Laporan keseluruhan
+
+## Struktur Proyek
 
 ```
 src/
 ├── main/
 │   ├── java/
-│   │   └── com/kurniadi/cucumber/
+│   │   └── com/juaracoding/kelompok1/
 │   │       ├── drivers/
-│   │       │   ├── DriverSingleton.java (Singleton pattern for WebDriver)
+│   │       │   ├── DriverSingleton.java (Pola Singleton untuk WebDriver)
 │   │       │   └── strategies/
-│   │       │       ├── Chrome.java
-│   │       │       ├── Firefox.java
-│   │       │       ├── DriverStrategy.java (Interface)
-│   │       │       └── DriverStrategyImplementer.java
 │   │       ├── pages/
-│   │       │   ├── InventoryPage.java (Inventory & Cart operations)
-│   │       │   └── LoginPage.java (Login operations)
+│   │       │   ├── BasePage.java (Kelas dasar untuk halaman)
+│   │       │   ├── DashboardPage.java
+│   │       │   ├── DownloadAbsen.java
+│   │       │   ├── LaporanCuti.java
+│   │       │   ├── LaporanIzinPulangCepat.java
+│   │       │   ├── LaporanIzinTerlambat.java
+│   │       │   ├── LaporanKehadiran.java
+│   │       │   ├── LaporanKoreksi.java
+│   │       │   ├── LaporanLembur.java
+│   │       │   ├── LaporanSakit.java
+│   │       │   └── ...
 │   │       └── utils/
-│   │           └── Constants.java (URLs and credentials)
 │   └── resources/
 │       └── features/
-│           ├── AddToCart.feature (Add to cart scenarios)
-│           ├── Sorting.feature (Product sorting scenarios)
-│           └── Login.feature (Authentication scenarios)
+│           ├── Dashboard.feature
+│           ├── DownloadAbsen.feature
+│           ├── LaporanCuti.feature
+│           ├── LaporanIzinPulangCepat.feature
+│           ├── LaporanIzinTerlambat.feature
+│           ├── LaporanKehadiran.feature
+│           ├── LaporanKoreksi.feature
+│           ├── LaporanLembur.feature
+│           ├── LaporanSakit.feature
+│           ├── Login.feature
+│           └── ReportsAll.feature
 └── test/
     └── java/
-        └── com/juaracoding/
-            ├── AddToCartTest.java (Add to cart step definitions)
-            ├── SortingTest.java (Product sorting step definitions)
+        └── com/juaracoding/kelompok1/
+            ├── DashboardSteps.java
+            ├── DownloadAbsenTest.java
+            ├── LaporanCutiTest.java
+            ├── LaporanIzinPulangCepatTest.java
+            ├── LaporanIzinTerlambatTest.java
+            ├── LaporanKehadiranTest.java
+            ├── LaporanKoreksiTest.java
+            ├── LaporanLemburTest.java
+            ├── LaporanSakitTest.java
+            ├── LoginTest.java
+            ├── ReportsTest.java
+            └── TestRunner.java
+```
+
+## Prasyarat
+
+- Java 8 atau lebih tinggi
+- Maven 3.x
+- WebDriver (ChromeDriver, GeckoDriver, dll.)
+- Browser (Chrome, Firefox, dll.)
+
+## Setup
+
+1. Clone repositori ini:
+   ```
+   git clone <repository-url>
+   cd Hadir-Quality-Assurance-main
+   ```
+
+2. Install dependencies:
+   ```
+   mvn clean install
+   ```
+
+3. Pastikan WebDriver sesuai dengan versi browser Anda.
+
+## Menjalankan Test
+
+Jalankan semua test menggunakan Maven:
+```
+mvn test
+```
+
+Atau jalankan TestRunner spesifik:
+```
+mvn test -Dtest=TestRunner
+```
+
+## Pelaporan
+
+- Laporan Extent: `test-output/SparkReport/Index.html`
+- Screenshot: `test-output/Screenshots/`
+- Cucumber JSON: `target/cucumber.json`
+
+## Teknologi yang Digunakan
+
+- **Java**: Bahasa pemrograman utama
+- **Maven**: Build tool
+- **Cucumber**: BDD framework
+- **Selenium WebDriver**: Automation tool
+- **TestNG**: Testing framework
+- **ExtentReports**: Reporting tool
+
+## Kontribusi
+
+1. Fork repositori
+2. Buat branch fitur baru (`git checkout -b feature/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
+
+## Lisensi
+
+Proyek ini menggunakan lisensi MIT. Lihat file `LICENSE` untuk detail lebih lanjut.
             ├── LoginTest.java (Login and common step definitions)
             └── TestRunner.java (Cucumber test runner)
 ```

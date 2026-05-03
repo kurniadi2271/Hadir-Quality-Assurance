@@ -1,3 +1,4 @@
+@SIT @Login
 # login.feature
 Feature: Login Page
   As an application user,

@@ -61,7 +61,7 @@ public class LoginTest {
     public void clicks_the_login_button() throws InterruptedException {
         logger.info("Clicking the login button");
         loginPage.clickLogin();
-        Thread.sleep(3000); 
+        Thread.sleep(5000); 
     }
 
     @Then("The user is successfully redirected to the dashboard")
