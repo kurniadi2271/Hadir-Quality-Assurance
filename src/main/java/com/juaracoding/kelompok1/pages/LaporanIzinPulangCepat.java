@@ -5,9 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 
-public class LaporanKoreksi extends BasePage {
+public class LaporanIzinPulangCepat extends BasePage {
 
-    public LaporanKoreksi(WebDriver driver) {
+    public LaporanIzinPulangCepat(WebDriver driver) {
         super(driver);
     }
 
@@ -15,11 +15,11 @@ public class LaporanKoreksi extends BasePage {
     @FindBy(xpath = "//*[contains(text(), 'Laporan')]")
     private WebElement laporanMenu;
 
-    @FindBy(xpath = "//*[contains(@class, 'sidebar')]//p[text()='Koreksi']")
-    private WebElement koreksiSubMenu;
+    @FindBy(xpath = "//*[contains(@class, 'sidebar')]//p[text()='Izin Pulang Cepat']")
+    private WebElement izinPulangCepatSubMenu;
 
-    @FindBy(xpath = "//div[contains(@class, 'MuiToolbar-root')]//p[text()='Koreksi']")
-    private WebElement koreksiPageHeader;
+    @FindBy(xpath = "//div[contains(@class, 'MuiToolbar-root')]//p[text()='Izin Pulang Cepat']")
+    private WebElement izinPulangCepatPageHeader;
 
 
     // --- SEGMENT 2: FILTER & CALENDAR ELEMENTS ---
@@ -47,10 +47,10 @@ public class LaporanKoreksi extends BasePage {
         laporanMenu.click();
     }
 
-    public void clickKoreksiSubMenu(){
-        waitForElementVisible(koreksiSubMenu);
-        koreksiSubMenu.click();
-        waitForElementVisible(koreksiPageHeader);
+    public void clickIzinPulangCepatSubMenu(){
+        waitForElementVisible(izinPulangCepatSubMenu);
+        izinPulangCepatSubMenu.click();
+        waitForElementVisible(izinPulangCepatPageHeader);
         delay(2);
     }
 
@@ -58,31 +58,7 @@ public class LaporanKoreksi extends BasePage {
     // --- METHODS: FILTER & SEARCH ---
 
     // --- METHODS: TABLE ACTIONS ---
-    public void clickApprovalButton() {
-        waitForElementVisible(approvalButton);
-        approvalButton.click();
-    }
-
-    public void clickApprovalConfirmButton() {
-        waitForElementVisible(approvalConfirmButton);
-        approvalConfirmButton.click();
-    }
-
-    public void clickRejectButton() {
-        waitForElementVisible(rejectButton);
-        rejectButton.click();
-    }
-
-    public void enterRejectReason(String reason) {
-        waitForElementVisible(rejectReasonInput);
-        rejectReasonInput.clear();
-        rejectReasonInput.sendKeys(reason);
-    }
-
-    public void clickRejectReasonConfirmButton() {
-        waitForElementVisible(rejectReasonConfirmButton);
-        rejectReasonConfirmButton.click();
-    }
+    
 
 
     // --- METHODS: DATA VALIDATION ---

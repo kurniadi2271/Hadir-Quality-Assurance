@@ -46,6 +46,7 @@ public class LaporanLembur extends BasePage {
         waitForElementVisible(lemburSubMenu);
         lemburSubMenu.click();
         waitForElementVisible(lemburPageHeader);
+        delay(2);
     }
 
 
@@ -72,4 +73,11 @@ public class LaporanLembur extends BasePage {
     }
 
     // Helper untuk menggantikan Thread.sleep agar lebih rapi
+    private void delay(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }

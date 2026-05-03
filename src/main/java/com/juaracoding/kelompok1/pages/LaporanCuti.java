@@ -225,7 +225,6 @@ public class LaporanCuti extends BasePage {
 
     // Method untuk mengambil semua teks tanggal dari kolom tertentu (misal kolom ke-4)
     public List<String> getAllDatesFromTable() {
-        // Sesuaikan index [4] dengan posisi kolom tanggal di aplikasi Anda
         List<WebElement> dateElements = dateCells; 
         List<String> dates = new ArrayList<>();
         for (WebElement el : dateElements) {

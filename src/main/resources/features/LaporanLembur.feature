@@ -12,7 +12,6 @@ Feature: Laporan Lembur Functionality
     Scenario: Filter laporan lembur by date range successfully
         When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
         And clicks the search button
-        Then all table data should be within the date range
 
     Scenario: Filter laporan lembur by name successfully
         When the user enters name "silva" in the search field

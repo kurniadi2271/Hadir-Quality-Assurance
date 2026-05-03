@@ -4,13 +4,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import com.juaracoding.kelompok1.drivers.DriverSingleton;
-import com.juaracoding.kelompok1.pages.LoginPage;
-import com.juaracoding.kelompok1.pages.DashboardPage;
-import com.juaracoding.kelompok1.pages.LaporanCuti;
-import com.juaracoding.kelompok1.pages.LaporanSakit;
-import com.juaracoding.kelompok1.pages.LaporanLembur;
-import com.juaracoding.kelompok1.pages.LaporanKoreksi;
-import com.juaracoding.kelompok1.pages.DownloadAbsen;
+import com.juaracoding.kelompok1.pages.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -23,6 +17,9 @@ public class Hooks {
     public static LaporanSakit laporanSakit;
     public static LaporanLembur laporanLembur;
     public static LaporanKoreksi laporanKoreksi;
+    public static LaporanKehadiran laporanKehadiran;
+    public static LaporanIzinTerlambat laporanIzinTerlambat;
+    public static LaporanIzinPulangCepat laporanIzinPulangCepat;
     public static DownloadAbsen downloadAbsen;
 
     @Before(order = 1)
@@ -35,9 +32,11 @@ public class Hooks {
         laporanSakit = new LaporanSakit(driver);
         laporanLembur = new LaporanLembur(driver);
         laporanKoreksi = new LaporanKoreksi(driver);
+        laporanKehadiran = new LaporanKehadiran(driver);
+        laporanIzinTerlambat = new LaporanIzinTerlambat(driver);
+        laporanIzinPulangCepat = new LaporanIzinPulangCepat(driver);
         downloadAbsen = new DownloadAbsen(driver);
     }
-
 
     @After
     public void tearDown(Scenario scenario) {

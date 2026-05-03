@@ -45,6 +45,7 @@ public class LaporanSakit extends BasePage {
         waitForElementVisible(sakitSubMenu);
         sakitSubMenu.click();
         waitForElementVisible(sakitPageHeader);
+        delay(2);
     }
 
     
@@ -82,5 +83,12 @@ public class LaporanSakit extends BasePage {
             System.out.println("Error checking image URL: " + e.getMessage());
         }
         return responseCode;
+    }
+    private void delay(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

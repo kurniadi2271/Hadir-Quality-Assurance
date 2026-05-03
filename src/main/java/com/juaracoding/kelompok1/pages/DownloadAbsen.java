@@ -63,6 +63,7 @@ public class DownloadAbsen extends BasePage {
         waitForElementVisible(downloadAbsenSubMenu);
         downloadAbsenSubMenu.click();
         waitForElementVisible(downloadAbsenPageHeader);
+        delay(2);
     }
 
 

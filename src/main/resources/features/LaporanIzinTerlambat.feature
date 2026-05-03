@@ -1,5 +1,5 @@
-@SIT @LaporanKoreksi
-Feature: Laporan Koreksi Functionality
+@SIT @LaporanIzinTerlambat
+Feature: Laporan Izin Terlambat Functionality
 
     Background:
         Given User is on the login page
@@ -7,20 +7,20 @@ Feature: Laporan Koreksi Functionality
         And The user clicks the login button
         Then The user is successfully redirected to the dashboard
         And the user navigates to the Laporan menu
-        Then the user selects the Koreksi submenu
+        Then the user selects the Izin Terlambat submenu
 
     Scenario: Filter laporan koreksi by date range successfully
         When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
         And clicks the search button
 
     Scenario: Filter laporan koreksi by name successfully
-        When the user enters name "silva" in the search field
+        When the user enters name "mafira" in the search field
         And clicks the search button
         Then all table data should match the name
 
     Scenario: Filter laporan koreksi by department using filter button
         When the user clicks the filter button
-        And enters department "Recruitment" in the department search field
+        And enters department "Sysmex" in the department search field
         And clicks the terapkan button
         And clicks the search button
         Then the user should see the list of reports
@@ -35,20 +35,5 @@ Feature: Laporan Koreksi Functionality
         And clicks the search button
         Then the table should be empty
 
-    Scenario: Reject laporan koreksi with reason successfully
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
-        When the user enters name "silva" in the search field
-        When the user clicks the filter button
-        And enters department "Axiata Digital Labs" in the department search field
-        And clicks the terapkan button
-        And clicks the search button
-        Then the user should see the list of reports
-        And clicks the reject koreksi button with reason "Data tidak valid"
-        Then the user should see an alert message "Berhasil menolak permintaan koreksi absen"
-
-    Scenario: Approval laporan koreksi successfully
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
-        And clicks the search button
-        And clicks the approval koreksi button and confirms
-        Then the user should see an alert message "Berhasil menyetujui koreksi absen"
+    
 

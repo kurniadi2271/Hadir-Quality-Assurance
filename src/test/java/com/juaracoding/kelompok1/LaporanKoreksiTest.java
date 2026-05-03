@@ -2,7 +2,7 @@ package com.juaracoding.kelompok1;
 
 import com.juaracoding.kelompok1.pages.LaporanKoreksi;
 import com.juaracoding.kelompok1.utils.Hooks;
-import io.cucumber.java.en.*;
+import io.cucumber.java.en.And;
 
 public class LaporanKoreksiTest {
 
