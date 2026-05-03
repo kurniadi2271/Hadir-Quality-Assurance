@@ -21,6 +21,8 @@ public class Hooks {
     public static LaporanIzinTerlambat laporanIzinTerlambat;
     public static LaporanIzinPulangCepat laporanIzinPulangCepat;
     public static DownloadAbsen downloadAbsen;
+    public static ReportsLoginPage reportsLoginPage;
+    public static ReportsPage reportsPage;
 
     @Before(order = 1)
     public void setUp() {
@@ -36,6 +38,8 @@ public class Hooks {
         laporanIzinTerlambat = new LaporanIzinTerlambat(driver);
         laporanIzinPulangCepat = new LaporanIzinPulangCepat(driver);
         downloadAbsen = new DownloadAbsen(driver);
+        reportsLoginPage = new ReportsLoginPage(driver);
+        reportsPage = new ReportsPage(driver);
     }
 
     @After
