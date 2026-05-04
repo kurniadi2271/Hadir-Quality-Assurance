@@ -9,6 +9,14 @@ Feature: Laporan Kehadiran Functionality
         And the user navigates to the Laporan menu
         Then the user selects the Kehadiran submenu
 
+    Scenario: Filter laporan koreksi by department using filter button
+        When the user clicks the filter button
+        And enters department "Axiata Digital Labs" in the department search field
+        And clicks the terapkan button
+        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        And clicks the search button
+        Then the user should see the list of reports
+
     Scenario: Filter laporan koreksi by date range successfully
         When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
         And clicks the search button
@@ -18,14 +26,6 @@ Feature: Laporan Kehadiran Functionality
         When the user enters name "silva" in the search field
         And clicks the search button
         Then all table data should match the name
-
-    Scenario: Filter laporan koreksi by department using filter button
-        When the user clicks the filter button
-        And enters department "Axiata Digital Labs" in the department search field
-        And clicks the terapkan button
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
-        And clicks the search button
-        Then the user should see the list of reports
 
     Scenario: Reset search filter
         When the user enters name "Testing Data" in the search field
@@ -47,7 +47,7 @@ Feature: Laporan Kehadiran Functionality
     #     Then the user should see the list of reports
     #     And user klik tombol export
     #     And user klik export lagi untuk konfirmasi
-    #     Then validasi file excel harus mengandung data spesifik "!IKAN TOMAN", "Axiata Digital Labs", dan "SQA"
+    #     Then validasi file excel kehadiran harus mengandung data spesifik "!ikan toman", "Axiata Digital Labs", dan "SQA"
 
     # Scenario: Export laporan kehadiran tapi datanya memang kosong di database
     #     When the user selects date range from "1" "April" "2026" to "2" "April" "2026"

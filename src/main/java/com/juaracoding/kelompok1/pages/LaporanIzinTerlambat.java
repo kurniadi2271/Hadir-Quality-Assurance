@@ -45,6 +45,7 @@ public class LaporanIzinTerlambat extends BasePage {
     public void clickLaporanMenu(){
         waitForElementVisible(laporanMenu);
         laporanMenu.click();
+        delay(2);
     }
 
     public void clickIzinTerlambatSubMenu(){

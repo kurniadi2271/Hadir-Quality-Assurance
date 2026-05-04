@@ -9,6 +9,13 @@ Feature: Laporan Cuti Functionality
         And the user navigates to the Laporan menu
         Then the user selects the Cuti submenu
 
+    Scenario: Filter laporan cuti by department using filter button
+        When the user clicks the filter button
+        And enters department "Recruitment" in the department search field
+        And clicks the terapkan button
+        And clicks the search button
+        Then the user should see the list of reports
+        
     Scenario: Filter laporan cuti by date range successfully
         When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
         And clicks the search button
@@ -18,13 +25,6 @@ Feature: Laporan Cuti Functionality
         When the user enters name "silva" in the search field
         And clicks the search button
         Then all table data should match the name
-
-    Scenario: Filter laporan cuti by department using filter button
-        When the user clicks the filter button
-        And enters department "Recruitment" in the department search field
-        And clicks the terapkan button
-        And clicks the search button
-        Then the user should see the list of reports
 
     Scenario: Reset search filter
         When the user enters name "Testing Data" in the search field
@@ -37,7 +37,7 @@ Feature: Laporan Cuti Functionality
         Then the table should be empty
 
     Scenario: Cancel a cuti request successfully
-        When the user enters name "Aditya" in the search field
+        When the user enters name "Aldi" in the search field
         And clicks the search button
         And the user scrolls the table to the right to find Action button
         And clicks the action button on the first row

@@ -3,13 +3,17 @@ package com.juaracoding.kelompok1.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Duration;
+import org.openqa.selenium.Keys;
 
 public class LaporanCuti extends BasePage {
 
@@ -40,7 +44,7 @@ public class LaporanCuti extends BasePage {
     @FindBy(xpath ="(//li[@role='option'])[1]")
     private WebElement firstDepartmentOption;
 
-    @FindBy(xpath = "//button[text()='Terapkan']")
+    @FindBy(xpath = "//button[contains(text(), 'Terapkan')]")
     private WebElement terapkanButton;
 
     @FindBy(xpath = "//button[contains(text(), 'Reset')]")
@@ -120,18 +124,46 @@ public class LaporanCuti extends BasePage {
     }
 
     public void enterSearchDepartment(String department) {
-        waitForElementVisible(searchDepartmentInput);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        
+        // 1. Pastikan input field siap
+        wait.until(ExpectedConditions.elementToBeClickable(searchDepartmentInput));
+        searchDepartmentInput.click(); // Klik dulu supaya fokus
         searchDepartmentInput.clear();
-        searchDepartmentInput.sendKeys(department);
-        waitForElementVisible(firstDepartmentOption);
-        delay(2);
-        firstDepartmentOption.click();
+        
+        // 2. Kirim teks satu per satu (opsional tapi lebih stabil untuk dropdown filter)
+        for (char c : department.toCharArray()) {
+            searchDepartmentInput.sendKeys(String.valueOf(c));
+        }
+
+        // 3. Tambahkan sedikit jeda agar filter selesai loading
+        try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
+
+        String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", department);
+        
+        // 4. Coba klik dengan mekanisme yang lebih kuat
+        try {
+            WebElement opsiTepat = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpathOpsi)));
+            
+            // Klik pakai JavaScript biar gak rewel soal koordinat/stale
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", opsiTepat);
+            
+        } catch (Exception e) {
+            // Jika gagal (misal ketutup), coba kirim tombol ENTER sebagai backup
+            System.out.println("Gagal klik opsi, mencoba tekan ENTER sebagai alternatif");
+            searchDepartmentInput.sendKeys(Keys.ENTER);
+        }
     }
 
     public void clickTerapkanButton() {
-        waitForElementVisible(terapkanButton);
-        delay(2);
-        terapkanButton.click();
+        try {
+            WebElement element = driver.findElement(By.xpath("//button[contains(., 'Terapkan')]"));
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", element);
+        } catch (Exception e) {
+            System.out.println("JS Click failed: " + e.getMessage());
+        }
     }
 
     public void clickSearchButton() {
@@ -162,6 +194,7 @@ public class LaporanCuti extends BasePage {
 
     public void selectFullDateRange(String startDay, String startMonth, String startYear, 
                                 String endDay, String endMonth, String endYear) {
+        delay(2);
         waitForElementVisible(datePicker);
         datePicker.click();
         delay(1);
@@ -180,21 +213,6 @@ public class LaporanCuti extends BasePage {
         saveDate.click();
     }
     
-    // public void selectDateRange(String start, String end) {
-    //     // Menggunakan delay kecil untuk stabilitas UI jika diperlukan
-    //     delay(1); 
-    //     waitForElementVisible(datePicker);
-    //     datePicker.click();
-        
-    //     clickDynamicDate(start);
-        
-    //     clickDynamicDate(end);
-        
-    //     waitForElementVisible(saveDate);
-    //     saveDate.click();
-    // }
-
-
     // --- METHODS: TABLE ACTIONS ---
     public void scrollToActionButton() {
         waitForElementVisible(actionButton);

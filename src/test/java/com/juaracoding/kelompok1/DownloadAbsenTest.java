@@ -16,9 +16,10 @@ public class DownloadAbsenTest {
         downloadAbsen.clickDownloadAbsenSubMenu();
     }
 
-    @When("user pilih tanggal dari {string} sampai {string}")
-    public void user_pilih_tanggal(String start, String end) {
-        downloadAbsen.selectDateRange(start, end);
+    @When("the user selects date range Download from {string} {string} {string} to {string} {string} {string}")
+    public void the_user_selects_full_date_range(String sDay, String sMonth, String sYear, 
+                                                String eDay, String eMonth, String eYear) {
+        downloadAbsen.selectFullDateRange(sDay, sMonth, sYear, eDay, eMonth, eYear);
     }
 
     @And("enters nik {string} in the nik input field")

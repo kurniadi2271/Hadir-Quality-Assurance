@@ -10,7 +10,7 @@ Feature: Download Absen Functionality
         Then the user selects the Download Absen submenu
 
     Scenario: Download laporan absen berdasarkan tanggal, nik, name, upliner, divisi, dan unit
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters nik "D6230554" in the nik input field
         And enters name "!ikan toman" in the name input field
         And enters upliner "!ikan Salmon" in the upliner input field
@@ -21,7 +21,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan tapi datanya memang kosong di database
-        When the user selects date range from "1" "April" "2026" to "2" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "2" "April" "2026"
         And enters upliner "!ikan toman" in the upliner input field
         And enters unit "Recruitment" in the unit input field
         And user klik tombol download
@@ -34,42 +34,42 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal dan nik
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters nik "D6230554" in the nik input field
         And user klik tombol download
         Then the user should see an alert message "Berhasil generate report"
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal dan name
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters name "!ikan toman" in the name input field
         And user klik tombol download
         Then the user should see an alert message "Berhasil generate report"
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal dan upliner
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters upliner "!ikan Salmon" in the upliner input field
         And user klik tombol download
         Then the user should see an alert message "Berhasil generate report"
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal dan divisi
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters divisi "!TestEditBerhasil" in the divisi input field
         And user klik tombol download
         Then the user should see an alert message "Berhasil generate report"
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal dan unit
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters unit "Axiata Digital Labs" in the unit input field
         And user klik tombol download
         Then the user should see an alert message "Berhasil generate report"
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, nik dan name
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters nik "D6230554" in the nik input field
         And enters name "!ikan toman" in the name input field
         And user klik tombol download
@@ -77,7 +77,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, nik dan upliner
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters nik "D6230554" in the nik input field
         And enters upliner "!ikan Salmon" in the upliner input field
         And user klik tombol download
@@ -85,7 +85,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, nik, dan divisi
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters nik "D6230554" in the nik input field
         And enters divisi "!TestEditBerhasil" in the divisi input field
         And user klik tombol download
@@ -93,7 +93,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, nik, dan unit
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters nik "D6230554" in the nik input field
         And enters unit "Axiata Digital Labs" in the unit input field
         And user klik tombol download
@@ -101,7 +101,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, name, dan upliner
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters name "!ikan toman" in the name input field
         And enters upliner "!ikan Salmon" in the upliner input field
         And user klik tombol download
@@ -109,7 +109,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, name, dan divisi
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters name "!ikan toman" in the name input field
         And enters divisi "!TestEditBerhasil" in the divisi input field
         And user klik tombol download
@@ -117,7 +117,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, name, dan unit
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters name "!ikan toman" in the name input field
         And enters unit "Axiata Digital Labs" in the unit input field
         And user klik tombol download
@@ -125,7 +125,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, upliner, dan divisi
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters upliner "!ikan Salmon" in the upliner input field
         And enters divisi "!TestEditBerhasil" in the divisi input field
         And user klik tombol download
@@ -133,7 +133,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, upliner, dan unit
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters upliner "!ikan Salmon" in the upliner input field
         And enters unit "Axiata Digital Labs" in the unit input field
         And user klik tombol download
@@ -141,7 +141,7 @@ Feature: Download Absen Functionality
         Then validasi file excel harus mengandung data spesifik "D6230554", "!IKAN TOMAN", dan "AXIATA DIGITAL LABS"
 
     Scenario: Download laporan absen berdasarkan tanggal, divisi, dan unit
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        When the user selects date range Download from "1" "April" "2026" to "28" "April" "2026"
         And enters divisi "!TestEditBerhasil" in the divisi input field
         And enters unit "Axiata Digital Labs" in the unit input field
         And user klik tombol download

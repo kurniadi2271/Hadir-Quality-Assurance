@@ -9,6 +9,14 @@ Feature: Laporan Izin Terlambat Functionality
         And the user navigates to the Laporan menu
         Then the user selects the Izin Terlambat submenu
 
+    Scenario: Filter laporan koreksi by department using filter button
+        When the user clicks the filter button
+        And enters department "Sysmex" in the department search field
+        And clicks the terapkan button
+        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
+        And clicks the search button
+        Then the user should see the list of reports
+
     Scenario: Filter laporan koreksi by date range successfully
         When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
         And clicks the search button
@@ -16,14 +24,6 @@ Feature: Laporan Izin Terlambat Functionality
 
     Scenario: Filter laporan koreksi by name successfully
         When the user enters name "mafira" in the search field
-        When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
-        And clicks the search button
-        Then the user should see the list of reports
-
-    Scenario: Filter laporan koreksi by department using filter button
-        When the user clicks the filter button
-        And enters department "Sysmex" in the department search field
-        And clicks the terapkan button
         When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
         And clicks the search button
         Then the user should see the list of reports

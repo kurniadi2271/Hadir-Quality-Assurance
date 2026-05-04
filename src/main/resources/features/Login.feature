@@ -14,7 +14,6 @@ Feature: Login Page
     And The user clicks the login button
     Then The user is successfully redirected to the dashboard
     
-
   # TC_LOG_002 - Logout Function
   Scenario: TC_LOG_002 - Logout successfully ends the session
     Given User is already logged in to the Dashboard

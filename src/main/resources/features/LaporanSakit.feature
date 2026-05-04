@@ -9,6 +9,13 @@ Feature: Laporan Sakit Functionality
         And the user navigates to the Laporan menu
         Then the user selects the Sakit submenu
 
+    Scenario: Filter laporan sakit by department using filter button
+        When the user clicks the filter button
+        And enters department "Recruitment" in the department search field
+        And clicks the terapkan button
+        And clicks the search button
+        Then the user should see the list of reports
+
     Scenario: Filter laporan sakit by date range successfully
         When the user selects date range from "1" "April" "2026" to "28" "April" "2026"
         And clicks the search button
@@ -18,13 +25,6 @@ Feature: Laporan Sakit Functionality
         When the user enters name "silva" in the search field
         And clicks the search button
         Then all table data should match the name
-
-    Scenario: Filter laporan sakit by department using filter button
-        When the user clicks the filter button
-        And enters department "Recruitment" in the department search field
-        And clicks the terapkan button
-        And clicks the search button
-        Then the user should see the list of reports
 
     Scenario: Reset search filter
         When the user enters name "Testing Data" in the search field

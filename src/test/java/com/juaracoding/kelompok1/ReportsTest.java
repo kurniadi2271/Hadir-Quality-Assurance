@@ -1,7 +1,6 @@
 package com.juaracoding.kelompok1;
 
 import com.juaracoding.kelompok1.utils.Hooks;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import org.testng.Assert;
@@ -13,13 +12,6 @@ import java.util.List;
 public class ReportsTest {
 
     // ── TC_REP_001: Auth + Navigation + Table Assertion ──
-
-    @Given("user is logged in as admin")
-    public void userIsLoggedInAsAdmin() {
-        Hooks.reportsLoginPage.open();
-        Hooks.reportsLoginPage.login("admin@hadir.com", "MagangSQA_JC@123");
-        Assert.assertTrue(Hooks.reportsLoginPage.isLoggedIn(), "Login failed or still on login page.");
-    }
 
     @When("user opens Reports page")
     public void userOpensReportsPage() {

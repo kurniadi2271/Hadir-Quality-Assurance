@@ -3,6 +3,7 @@ package com.juaracoding.kelompok1.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.By;
 
 public class DownloadAbsen extends BasePage {
@@ -46,6 +47,12 @@ public class DownloadAbsen extends BasePage {
     @FindBy(xpath = "//input[@placeholder='Start Date']/following::button[1]")
     private WebElement datePicker;
 
+    @FindBy(xpath = "//span[@class='rdrMonthPicker']/select")
+    private WebElement monthDropdown;
+
+    @FindBy(xpath = "//span[@class='rdrYearPicker']/select")
+    private WebElement yearDropdown;
+
     @FindBy(xpath = "//input[@placeholder='Start Date']/following::button[2]")
     private WebElement saveDate;
 
@@ -72,6 +79,7 @@ public class DownloadAbsen extends BasePage {
         waitForElementVisible(searchNikInput);
         searchNikInput.clear();
         searchNikInput.sendKeys(nik);
+        delay(1);
         // Membuat dynamic xpath yang mencari element dengan teks yang pas
         String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", nik);
         
@@ -84,6 +92,7 @@ public class DownloadAbsen extends BasePage {
         waitForElementVisible(searchNameInput);
         searchNameInput.clear();
         searchNameInput.sendKeys(name);
+        delay(1);
         String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", name);
         
         WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
@@ -95,6 +104,7 @@ public class DownloadAbsen extends BasePage {
         waitForElementVisible(searchUplinerInput);
         searchUplinerInput.clear();
         searchUplinerInput.sendKeys(upliner);
+        delay(1);
         String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", upliner);
         
         WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
@@ -106,6 +116,7 @@ public class DownloadAbsen extends BasePage {
         waitForElementVisible(searchDivisiInput);
         searchDivisiInput.clear();
         searchDivisiInput.sendKeys(divisi);
+        delay(1);
         String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", divisi);
         
         WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
@@ -117,6 +128,7 @@ public class DownloadAbsen extends BasePage {
         waitForElementVisible(searchUnitInput);
         searchUnitInput.clear();
         searchUnitInput.sendKeys(unit);
+        delay(1);
         String xpathOpsi = String.format("//li[@role='option' and contains(., '%s')]", unit);
         
         WebElement opsiTepat = driver.findElement(By.xpath(xpathOpsi));
@@ -130,12 +142,14 @@ public class DownloadAbsen extends BasePage {
         delay(5);
     }
 
-    public void selectStartDate(String date) {
-        // Membentuk XPath dinamis berdasarkan angka tanggal yang dikirim dari feature file
-        String dynamicXPath = String.format("//span[contains(@class,'rdrDayNumber')]//span[text()='%s']", date);
-        WebElement dateElement = driver.findElement(By.xpath(dynamicXPath));
-        waitForElementVisible(dateElement);
-        dateElement.click();
+    private void selectMonth(String month) {
+        Select select = new Select(monthDropdown);
+        select.selectByVisibleText(month);
+    }
+
+    private void selectYear(String year) {
+        Select select = new Select(yearDropdown);
+        select.selectByVisibleText(year);
     }
 
     private void clickDynamicDate(String date) {
@@ -143,16 +157,22 @@ public class DownloadAbsen extends BasePage {
         driver.findElement(By.xpath(xpath)).click();
     }
 
-    public void selectDateRange(String start, String end) {
-        // Menggunakan delay kecil untuk stabilitas UI jika diperlukan
-        delay(2); 
+    public void selectFullDateRange(String startDay, String startMonth, String startYear, 
+                                String endDay, String endMonth, String endYear) {
         waitForElementVisible(datePicker);
         datePicker.click();
-        
-        clickDynamicDate(start);
-        
-        clickDynamicDate(end);
-        
+        delay(1);
+
+        // Pilih Bulan & Tahun Awal (Opsional: jika picker hanya satu panel, biasanya set start dulu)
+        selectMonth(startMonth);
+        selectYear(startYear);
+        clickDynamicDate(startDay);
+
+        // Pilih Bulan & Tahun Akhir
+        selectMonth(endMonth);
+        selectYear(endYear);
+        clickDynamicDate(endDay);
+
         waitForElementVisible(saveDate);
         saveDate.click();
     }
